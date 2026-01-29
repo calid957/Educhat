@@ -1,0 +1,1716 @@
+/* High-Tech Futuristic Theme */
+:root {
+    --primary-cyan: #00a8cc;
+    --primary-blue: #0066cc;
+    --primary-purple: #4a0080;
+    --primary-pink: #66004d;
+    --accent-green: #006644;
+    --accent-yellow: #666600;
+    --accent-red: #660033;
+    --dark-bg: #0a0a0f;
+    --darker-bg: #050508;
+    --light-text: #e0e0e8;
+    --dim-text: #9090a0;
+    --border-glow: rgba(0, 168, 204, 0.3);
+    --panel-bg: rgba(10, 10, 20, 0.7);
+    --panel-border: rgba(0, 168, 204, 0.2);
+}
+
+/* Animated background */
+body {
+    background: linear-gradient(135deg, #0a0a0f 0%, #1a0033 25%, #000428 50%, #004e92 75%, #0a0a0f 100%);
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Animated grid background */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(rgba(0, 168, 204, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 168, 204, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: grid-move 20s linear infinite;
+    z-index: -2;
+}
+
+@keyframes grid-move {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+}
+
+/* Floating particles */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 20% 50%, rgba(0, 168, 204, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(74, 0, 128, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(102, 0, 77, 0.05) 0%, transparent 50%);
+    animation: particle-float 15s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes particle-float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(-20px, -20px) scale(1.1); }
+    66% { transform: translate(20px, -10px) scale(0.9); }
+}
+
+/* Glass morphism with high-tech twist */
+.glass {
+    background: linear-gradient(135deg, rgba(10, 10, 20, 0.8), rgba(20, 20, 30, 0.7));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--panel-border);
+    border-radius: 16px;
+    box-shadow: 
+        0 8px 32px rgba(0, 168, 204, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05),
+        0 0 40px rgba(0, 168, 204, 0.03);
+    position: relative;
+    overflow: hidden;
+}
+
+.glass::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 168, 204, 0.1), transparent);
+    animation: scan-line 3s linear infinite;
+}
+
+@keyframes scan-line {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* High-tech buttons with Aurora effects */
+.glass-button {
+    background: linear-gradient(135deg, var(--primary-cyan), var(--primary-blue));
+    color: var(--light-text);
+    font-weight: 600;
+    border: 1px solid var(--primary-cyan);
+    border-radius: 8px;
+    padding: 12px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 14px;
+}
+
+/* Aurora gradient animation */
+.glass-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(0, 255, 255, 0.4),
+        rgba(128, 0, 255, 0.3),
+        rgba(255, 0, 255, 0.4),
+        rgba(0, 255, 128, 0.3),
+        transparent
+    );
+    animation: aurora-flow 3s linear infinite;
+    transition: left 0.5s ease;
+}
+
+@keyframes aurora-flow {
+    0% {
+        left: -100%;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(0, 255, 255, 0.4),
+            rgba(128, 0, 255, 0.3),
+            rgba(255, 0, 255, 0.4),
+            rgba(0, 255, 128, 0.3),
+            transparent
+        );
+    }
+    25% {
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(128, 0, 255, 0.4),
+            rgba(255, 0, 255, 0.3),
+            rgba(0, 255, 128, 0.4),
+            rgba(0, 255, 255, 0.3),
+            transparent
+        );
+    }
+    50% {
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 0, 255, 0.4),
+            rgba(0, 255, 128, 0.3),
+            rgba(0, 255, 255, 0.4),
+            rgba(128, 0, 255, 0.3),
+            transparent
+        );
+    }
+    75% {
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(0, 255, 128, 0.4),
+            rgba(0, 255, 255, 0.3),
+            rgba(128, 0, 255, 0.4),
+            rgba(255, 0, 255, 0.3),
+            transparent
+        );
+    }
+    100% {
+        left: 100%;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(0, 255, 255, 0.4),
+            rgba(128, 0, 255, 0.3),
+            rgba(255, 0, 255, 0.4),
+            rgba(0, 255, 128, 0.3),
+            transparent
+        );
+    }
+}
+
+/* Secondary aurora layer for depth */
+.glass-button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(0, 168, 204, 0.3),
+        rgba(102, 0, 153, 0.2),
+        rgba(204, 0, 102, 0.3),
+        rgba(0, 153, 102, 0.2),
+        transparent
+    );
+    animation: aurora-flow-secondary 4s linear infinite;
+    mix-blend-mode: screen;
+}
+
+@keyframes aurora-flow-secondary {
+    0% {
+        left: -100%;
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-2px);
+    }
+    100% {
+        left: 100%;
+        transform: translateY(0);
+    }
+}
+
+/* Hover aurora effects */
+.glass-button:hover::before {
+    animation-duration: 2s;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(0, 255, 255, 0.6),
+        rgba(128, 0, 255, 0.5),
+        rgba(255, 0, 255, 0.6),
+        rgba(0, 255, 128, 0.5),
+        transparent
+    );
+}
+
+.glass-button:hover::after {
+    animation-duration: 3s;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(0, 168, 204, 0.5),
+        rgba(102, 0, 153, 0.4),
+        rgba(204, 0, 102, 0.5),
+        rgba(0, 153, 102, 0.4),
+        transparent
+    );
+}
+
+.glass-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 8px 25px rgba(0, 168, 204, 0.4),
+        0 0 40px rgba(0, 168, 204, 0.3),
+        0 0 60px rgba(128, 0, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    text-shadow: 0 0 12px rgba(0, 168, 204, 0.8);
+    border-color: rgba(0, 255, 255, 0.6);
+}
+
+/* Active state aurora burst */
+.glass-button:active::before {
+    animation: aurora-burst 0.6s ease-out;
+}
+
+.glass-button:active::after {
+    animation: aurora-burst-secondary 0.8s ease-out;
+}
+
+@keyframes aurora-burst {
+    0% {
+        left: -100%;
+        opacity: 1;
+    }
+    50% {
+        left: 50%;
+        opacity: 0.8;
+    }
+    100% {
+        left: 100%;
+        opacity: 0;
+    }
+}
+
+@keyframes aurora-burst-secondary {
+    0% {
+        left: -100%;
+        opacity: 0.6;
+        transform: scale(1);
+    }
+    50% {
+        left: 50%;
+        opacity: 0.4;
+        transform: scale(1.1);
+    }
+    100% {
+        left: 100%;
+        opacity: 0;
+        transform: scale(1);
+    }
+}
+
+/* Aurora variants for different button types */
+.glass-button.aurora-cyan {
+    background: linear-gradient(135deg, #00a8cc, #0066cc);
+}
+
+.glass-button.aurora-purple {
+    background: linear-gradient(135deg, #4a0080, #66004d);
+}
+
+.glass-button.aurora-green {
+    background: linear-gradient(135deg, #006644, #00a8cc);
+}
+
+.glass-button.aurora-red {
+    background: linear-gradient(135deg, #660033, #66004d);
+}
+
+/* Pulsing aurora effect for special buttons */
+.glass-button.aurora-pulse::before {
+    animation: aurora-pulse 2s ease-in-out infinite;
+}
+
+@keyframes aurora-pulse {
+    0%, 100% {
+        left: -100%;
+        opacity: 0.6;
+    }
+    50% {
+        left: 100%;
+        opacity: 1;
+    }
+}
+
+/* Aurora glow effect */
+.glass-button.aurora-glow {
+    box-shadow: 
+        0 0 20px rgba(0, 168, 204, 0.3),
+        0 0 40px rgba(128, 0, 255, 0.2),
+        inset 0 0 20px rgba(0, 255, 255, 0.1);
+}
+
+.glass-button.aurora-glow:hover {
+    box-shadow: 
+        0 0 30px rgba(0, 168, 204, 0.5),
+        0 0 60px rgba(128, 0, 255, 0.3),
+        0 0 80px rgba(255, 0, 255, 0.2),
+        inset 0 0 30px rgba(0, 255, 255, 0.2);
+}
+
+/* Aurora wave effect */
+.glass-button.aurora-wave::before {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(0, 255, 255, 0.4),
+        rgba(128, 0, 255, 0.3),
+        rgba(255, 0, 255, 0.4),
+        rgba(0, 255, 128, 0.3),
+        transparent
+    );
+    animation: aurora-wave 3s ease-in-out infinite;
+}
+
+@keyframes aurora-wave {
+    0%, 100% {
+        left: -100%;
+        transform: translateY(0) scaleY(1);
+    }
+    25% {
+        transform: translateY(-2px) scaleY(1.1);
+    }
+    50% {
+        transform: translateY(0) scaleY(1);
+    }
+    75% {
+        transform: translateY(2px) scaleY(0.9);
+    }
+}
+
+/* Aurora particle effects */
+.glass-button.aurora-particles::before {
+    background: radial-gradient(
+        circle at 20% 50%,
+        rgba(0, 255, 255, 0.4) 0%,
+        transparent 50%
+    ),
+    radial-gradient(
+        circle at 80% 50%,
+        rgba(255, 0, 255, 0.3) 0%,
+        transparent 50%
+    ),
+    radial-gradient(
+        circle at 50% 20%,
+        rgba(128, 0, 255, 0.4) 0%,
+        transparent 50%
+    );
+    animation: aurora-particles 4s linear infinite;
+}
+
+@keyframes aurora-particles {
+    0% {
+        left: -100%;
+        transform: rotate(0deg);
+    }
+    100% {
+        left: 100%;
+        transform: rotate(360deg);
+    }
+}
+
+/* Aurora shimmer effect */
+.glass-button.aurora-shimmer::before {
+    background: linear-gradient(
+        105deg,
+        transparent 40%,
+        rgba(0, 255, 255, 0.6) 50%,
+        transparent 60%
+    );
+    animation: aurora-shimmer 2s infinite;
+}
+
+@keyframes aurora-shimmer {
+    0% {
+        left: -100%;
+        transform: skewX(-15deg);
+    }
+    100% {
+        left: 100%;
+        transform: skewX(-15deg);
+    }
+}
+
+/* Aurora breathing effect */
+.glass-button.aurora-breathe {
+    animation: aurora-breathe 3s ease-in-out infinite;
+}
+
+@keyframes aurora-breathe {
+    0%, 100% {
+        box-shadow: 
+            0 0 20px rgba(0, 168, 204, 0.3),
+            0 0 40px rgba(128, 0, 255, 0.2);
+    }
+    50% {
+        box-shadow: 
+            0 0 30px rgba(0, 168, 204, 0.5),
+            0 0 60px rgba(128, 0, 255, 0.3);
+    }
+}
+
+/* Aurora ripple effect on click */
+.glass-button.aurora-ripple::before {
+    animation: aurora-flow 3s linear infinite;
+}
+
+.glass-button.aurora-ripple:active::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(0, 255, 255, 0.6) 0%,
+        rgba(128, 0, 255, 0.4) 50%,
+        transparent 100%
+    );
+    transform: translate(-50%, -50%);
+    animation: aurora-ripple 0.6s ease-out;
+}
+
+@keyframes aurora-ripple {
+    0% {
+        width: 0;
+        height: 0;
+        opacity: 1;
+    }
+    100% {
+        width: 200px;
+        height: 200px;
+        opacity: 0;
+    }
+}
+
+/* High-tech inputs */
+.glass-input {
+    background: rgba(10, 10, 20, 0.7);
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--light-text);
+    font-size: 14px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.glass-input:focus {
+    outline: none;
+    border-color: var(--primary-cyan);
+    box-shadow: 
+        0 0 15px rgba(0, 168, 204, 0.2),
+        inset 0 0 8px rgba(0, 168, 204, 0.08);
+    background: rgba(10, 10, 20, 0.8);
+}
+
+.glass-input::placeholder {
+    color: var(--dim-text);
+}
+
+/* Navigation items */
+.nav-item {
+    background: linear-gradient(135deg, rgba(10, 10, 20, 0.5), rgba(20, 20, 30, 0.3));
+    border: 1px solid rgba(0, 168, 204, 0.15);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 168, 204, 0.08), transparent);
+    transition: left 0.5s ease;
+}
+
+.nav-item:hover::before {
+    left: 100%;
+}
+
+.nav-item:hover {
+    background: linear-gradient(135deg, rgba(0, 168, 204, 0.15), rgba(0, 102, 204, 0.15));
+    border-color: var(--primary-cyan);
+    transform: translateX(8px);
+    box-shadow: 0 0 15px rgba(0, 168, 204, 0.2);
+}
+
+.nav-item.active {
+    background: linear-gradient(135deg, rgba(0, 168, 204, 0.2), rgba(0, 102, 204, 0.2));
+    border-color: var(--primary-cyan);
+    box-shadow: 0 0 20px rgba(0, 168, 204, 0.25);
+}
+
+/* Status badges */
+.status-badge {
+    background: linear-gradient(135deg, var(--accent-green), var(--primary-cyan));
+    color: var(--light-text);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(0, 168, 204, 0.2);
+    box-shadow: 0 0 10px rgba(0, 168, 204, 0.2);
+}
+
+.status-badge.warning {
+    background: linear-gradient(135deg, var(--accent-yellow), var(--accent-red));
+    box-shadow: 0 0 10px rgba(255, 255, 0, 0.2);
+}
+
+.status-badge.error {
+    background: linear-gradient(135deg, var(--accent-red), var(--primary-pink));
+    box-shadow: 0 0 10px rgba(255, 0, 64, 0.2);
+}
+
+/* Tables */
+.hightech-table {
+    background: rgba(10, 10, 20, 0.7);
+    border: 1px solid var(--panel-border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 168, 204, 0.08);
+}
+
+.hightech-table th {
+    background: linear-gradient(135deg, rgba(0, 168, 204, 0.15), rgba(0, 102, 204, 0.15));
+    color: var(--light-text);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 12px;
+    padding: 16px;
+    border-bottom: 2px solid var(--primary-cyan);
+}
+
+.hightech-table td {
+    color: var(--dim-text);
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(0, 168, 204, 0.08);
+    transition: all 0.3s ease;
+}
+
+.hightech-table tr:hover td {
+    background: rgba(0, 168, 204, 0.03);
+    color: var(--light-text);
+}
+
+/* Cards */
+.hightech-card {
+    background: linear-gradient(135deg, rgba(10, 10, 20, 0.8), rgba(20, 20, 30, 0.7));
+    border: 1px solid var(--panel-border);
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.hightech-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, var(--primary-cyan), var(--primary-blue), var(--primary-purple), var(--primary-pink));
+    border-radius: 16px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.hightech-card:hover::before {
+    opacity: 0.3;
+}
+
+.hightech-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 168, 204, 0.2);
+}
+
+/* Animated text */
+.hightech-title {
+    background: linear-gradient(45deg, var(--primary-cyan), var(--primary-blue), var(--primary-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: text-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes text-glow {
+    0% { filter: drop-shadow(0 0 8px rgba(0, 168, 204, 0.3)); }
+    100% { filter: drop-shadow(0 0 15px rgba(0, 168, 204, 0.5)); }
+}
+
+/* Loading spinner */
+.hightech-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(0, 168, 204, 0.15);
+    border-top: 3px solid var(--primary-cyan);
+    border-radius: 50%;
+    animation: hightech-spin 1s linear infinite;
+    box-shadow: 0 0 15px rgba(0, 168, 204, 0.3);
+}
+
+@keyframes hightech-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Progress bars */
+.hightech-progress {
+    background: rgba(10, 10, 20, 0.7);
+    border: 1px solid var(--panel-border);
+    border-radius: 20px;
+    height: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+.hightech-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-cyan), var(--primary-blue), var(--primary-purple));
+    border-radius: 20px;
+    position: relative;
+    animation: progress-pulse 2s ease-in-out infinite;
+}
+
+@keyframes progress-pulse {
+    0%, 100% { box-shadow: 0 0 8px rgba(0, 168, 204, 0.3); }
+    50% { box-shadow: 0 0 15px rgba(0, 168, 204, 0.5); }
+}
+
+/* Toggle switches */
+.hightech-toggle {
+    position: relative;
+    width: 60px;
+    height: 30px;
+    background: rgba(10, 10, 20, 0.7);
+    border: 1px solid var(--panel-border);
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.hightech-toggle::before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 22px;
+    height: 22px;
+    background: var(--dim-text);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.hightech-toggle.active {
+    background: linear-gradient(135deg, var(--primary-cyan), var(--primary-blue));
+    border-color: var(--primary-cyan);
+    box-shadow: 0 0 15px rgba(0, 168, 204, 0.3);
+}
+
+.hightech-toggle.active::before {
+    left: 33px;
+    background: var(--light-text);
+    box-shadow: 0 0 8px rgba(0, 168, 204, 0.6);
+}
+
+/* Floating action buttons */
+.hightech-fab {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-cyan), var(--primary-blue));
+    border: 2px solid var(--primary-cyan);
+    color: var(--dark-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 255, 255, 0.3);
+}
+
+.hightech-fab:hover {
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 8px 30px rgba(0, 255, 255, 0.5);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(10, 10, 30, 0.8);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--primary-cyan), var(--primary-blue));
+    border-radius: 4px;
+    border: 1px solid var(--primary-cyan);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+/* Selection */
+::selection {
+    background: rgba(0, 255, 255, 0.3);
+    color: var(--light-text);
+}
+
+::-moz-selection {
+    background: rgba(0, 255, 255, 0.3);
+    color: var(--light-text);
+}
+
+/* Aurora effects responsive adjustments */
+
+/* Extra Large Screens (1200px and up) */
+@media (min-width: 1200px) {
+    .glass-button::before {
+        animation-duration: 2.5s;
+    }
+    
+    .glass-button::after {
+        animation-duration: 3.5s;
+    }
+    
+    .glass-button.aurora-glow {
+        box-shadow: 
+            0 0 25px rgba(0, 168, 204, 0.4),
+            0 0 50px rgba(128, 0, 255, 0.3),
+            inset 0 0 25px rgba(0, 255, 255, 0.15);
+    }
+}
+
+/* Large Screens (992px - 1199px) */
+@media (max-width: 1199px) and (min-width: 992px) {
+    .glass-button::before {
+        animation-duration: 3s;
+    }
+    
+    .glass-button::after {
+        animation-duration: 4s;
+    }
+}
+
+/* Medium Screens (768px - 991px) */
+@media (max-width: 991px) and (min-width: 768px) {
+    .glass-button::before {
+        animation-duration: 3.5s;
+    }
+    
+    .glass-button::after {
+        animation-duration: 4.5s;
+    }
+    
+    .glass-button:hover::before {
+        animation-duration: 2.5s;
+    }
+    
+    .glass-button.aurora-particles::before {
+        animation-duration: 5s;
+    }
+}
+
+/* Small Tablets (576px - 767px) */
+@media (max-width: 767px) and (min-width: 576px) {
+    .glass-button::before {
+        animation-duration: 4s;
+    }
+    
+    .glass-button::after {
+        animation-duration: 5s;
+    }
+    
+    .glass-button:hover::before {
+        animation-duration: 3s;
+    }
+    
+    .glass-button:hover::after {
+        animation-duration: 4s;
+    }
+    
+    /* Reduce aurora intensity for tablet performance */
+    .glass-button::before {
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(0, 255, 255, 0.3),
+            rgba(128, 0, 255, 0.25),
+            rgba(255, 0, 255, 0.3),
+            rgba(0, 255, 128, 0.25),
+            transparent
+        );
+    }
+    
+    .glass-button::after {
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(0, 168, 204, 0.25),
+            rgba(102, 0, 153, 0.2),
+            rgba(204, 0, 102, 0.25),
+            rgba(0, 153, 102, 0.2),
+            transparent
+        );
+    }
+    
+    .glass-button.aurora-glow {
+        box-shadow: 
+            0 0 15px rgba(0, 168, 204, 0.25),
+            0 0 30px rgba(128, 0, 255, 0.15);
+    }
+}
+
+/* Mobile Phones (480px - 575px) */
+@media (max-width: 575px) and (min-width: 480px) {
+    .glass-button::before {
+        animation-duration: 5s;
+    }
+    
+    .glass-button::after {
+        animation-duration: 6s;
+    }
+    
+    .glass-button:hover::before {
+        animation-duration: 4s;
+    }
+    
+    .glass-button:hover::after {
+        animation-duration: 5s;
+    }
+    
+    /* Simplify aurora for mobile performance */
+    .glass-button::before {
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(0, 255, 255, 0.25),
+            rgba(128, 0, 255, 0.2),
+            rgba(255, 0, 255, 0.25),
+            transparent
+        );
+    }
+    
+    .glass-button::after {
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(0, 168, 204, 0.2),
+            rgba(102, 0, 153, 0.15),
+            rgba(204, 0, 102, 0.2),
+            transparent
+        );
+    }
+    
+    /* Disable complex aurora effects on mobile */
+    .glass-button.aurora-particles::before,
+    .glass-button.aurora-wave::before,
+    .glass-button.aurora-shimmer::before {
+        animation: aurora-flow 5s linear infinite;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(0, 255, 255, 0.2),
+            rgba(128, 0, 255, 0.15),
+            transparent
+        );
+    }
+    
+    .glass-button.aurora-glow {
+        box-shadow: 
+            0 0 10px rgba(0, 168, 204, 0.2),
+            0 0 20px rgba(128, 0, 255, 0.1);
+    }
+    
+    .glass-button.aurora-breathe {
+        animation: none;
+    }
+}
+
+/* Extra Small Mobile (320px - 479px) */
+@media (max-width: 479px) {
+    .glass-button::before {
+        animation-duration: 6s;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(0, 255, 255, 0.2),
+            rgba(128, 0, 255, 0.15),
+            transparent
+        );
+    }
+    
+    .glass-button::after {
+        animation-duration: 7s;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(0, 168, 204, 0.15),
+            rgba(102, 0, 153, 0.1),
+            transparent
+        );
+    }
+    
+    /* Minimal aurora effects for performance */
+    .glass-button:hover::before {
+        animation-duration: 5s;
+    }
+    
+    .glass-button:hover::after {
+        animation-duration: 6s;
+    }
+    
+    /* Disable all complex aurora variants */
+    .glass-button.aurora-particles::before,
+    .glass-button.aurora-wave::before,
+    .glass-button.aurora-shimmer::before,
+    .glass-button.aurora-pulse::before {
+        animation: aurora-flow 6s linear infinite;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(0, 255, 255, 0.15),
+            transparent
+        );
+    }
+    
+    .glass-button.aurora-glow {
+        box-shadow: 0 0 8px rgba(0, 168, 204, 0.15);
+    }
+    
+    .glass-button.aurora-breathe {
+        animation: none;
+    }
+    
+    .glass-button.aurora-ripple:active::after {
+        animation: none;
+    }
+}
+
+/* Ultra Small Mobile (up to 319px) */
+@media (max-width: 319px) {
+    /* Disable aurora effects for ultra-small screens */
+    .glass-button::before,
+    .glass-button::after {
+        animation: none !important;
+        background: transparent !important;
+    }
+    
+    .glass-button.aurora-glow {
+        box-shadow: 0 0 5px rgba(0, 168, 204, 0.1);
+    }
+    
+    .glass-button.aurora-breathe {
+        animation: none !important;
+    }
+    
+    .glass-button.aurora-ripple:active::after {
+        display: none !important;
+    }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .glass-button::before,
+    .glass-button::after {
+        animation: none !important;
+        transition: none !important;
+    }
+    
+    .glass-button.aurora-breathe {
+        animation: none !important;
+    }
+    
+    .glass-button.aurora-ripple:active::after {
+        animation: none !important;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .glass-button::before {
+        animation-duration: 4s;
+    }
+    
+    .glass-button::after {
+        animation-duration: 5s;
+    }
+    
+    /* Reduce aurora intensity for touch devices */
+    .glass-button::before {
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(0, 255, 255, 0.2),
+            rgba(128, 0, 255, 0.15),
+            rgba(255, 0, 255, 0.2),
+            transparent
+        );
+    }
+    
+    .glass-button::after {
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(0, 168, 204, 0.15),
+            rgba(102, 0, 153, 0.1),
+            rgba(204, 0, 102, 0.15),
+            transparent
+        );
+    }
+    
+    /* Simplify aurora effects on touch */
+    .glass-button.aurora-particles::before,
+    .glass-button.aurora-wave::before,
+    .glass-button.aurora-shimmer::before {
+        animation: aurora-flow 4s linear infinite;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(0, 255, 255, 0.2),
+            rgba(128, 0, 255, 0.15),
+            transparent
+        );
+    }
+    
+    .glass-button.aurora-glow {
+        box-shadow: 
+            0 0 12px rgba(0, 168, 204, 0.2),
+            0 0 24px rgba(128, 0, 255, 0.1);
+    }
+}
+
+/* Low battery/device performance */
+@media (prefers-reduced-data: reduce) {
+    .glass-button::before {
+        animation-duration: 8s;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(0, 255, 255, 0.15),
+            transparent
+        );
+    }
+    
+    .glass-button::after {
+        display: none;
+    }
+    
+    .glass-button.aurora-glow {
+        box-shadow: 0 0 8px rgba(0, 168, 204, 0.15);
+    }
+    
+    .glass-button.aurora-particles,
+    .glass-button.aurora-wave,
+    .glass-button.aurora-shimmer,
+    .glass-button.aurora-pulse,
+    .glass-button.aurora-breathe {
+        animation: none !important;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .glass-button::before,
+    .glass-button::after {
+        opacity: 0.8;
+    }
+    
+    .glass-button.aurora-glow {
+        box-shadow: 
+            0 0 15px rgba(0, 168, 204, 0.5),
+            0 0 30px rgba(128, 0, 255, 0.3);
+    }
+}
+/* Extra Large Screens (1200px and up) */
+@media (min-width: 1200px) {
+    .hightech-title {
+        font-size: 2.5rem;
+        letter-spacing: 3px;
+    }
+    
+    .glass-button {
+        padding: 14px 28px;
+        font-size: 15px;
+    }
+    
+    .nav-item {
+        padding: 18px 24px;
+    }
+    
+    .glass {
+        border-radius: 20px;
+    }
+    
+    .hightech-card {
+        padding: 32px;
+    }
+}
+
+/* Large Screens (992px - 1199px) */
+@media (max-width: 1199px) and (min-width: 992px) {
+    .hightech-title {
+        font-size: 2.2rem;
+        letter-spacing: 2.5px;
+    }
+    
+    .glass-button {
+        padding: 13px 26px;
+        font-size: 14px;
+    }
+    
+    .nav-item {
+        padding: 16px 20px;
+    }
+}
+
+/* Medium Screens (768px - 991px) */
+@media (max-width: 991px) and (min-width: 768px) {
+    .hightech-title {
+        font-size: 2rem;
+        letter-spacing: 2px;
+    }
+    
+    .glass-button {
+        padding: 12px 24px;
+        font-size: 14px;
+    }
+    
+    .nav-item {
+        padding: 14px 18px;
+    }
+    
+    .glass {
+        border-radius: 14px;
+    }
+    
+    .hightech-card {
+        padding: 20px;
+    }
+    
+    /* Adjust grid layouts */
+    .grid-cols-1.lg\\:grid-cols-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .grid-cols-1.lg\\:grid-cols-3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .grid-cols-1.lg\\:grid-cols-2 {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+/* Small Tablets (576px - 767px) */
+@media (max-width: 767px) and (min-width: 576px) {
+    .hightech-title {
+        font-size: 1.8rem;
+        letter-spacing: 1.5px;
+    }
+    
+    .glass-button {
+        padding: 10px 20px;
+        font-size: 13px;
+    }
+    
+    .nav-item {
+        padding: 12px 16px;
+        margin-bottom: 6px;
+    }
+    
+    .glass {
+        border-radius: 12px;
+    }
+    
+    .hightech-card {
+        padding: 16px;
+    }
+    
+    /* Reduce animation intensity for mobile */
+    .glass::before {
+        animation-duration: 4s;
+    }
+    
+    .nav-item::before {
+        animation-duration: 4s;
+    }
+    
+    /* Adjust text sizes */
+    .hightech-table th {
+        font-size: 11px;
+        padding: 12px;
+    }
+    
+    .hightech-table td {
+        font-size: 12px;
+        padding: 10px;
+    }
+    
+    /* Stack grid layouts */
+    .grid-cols-1.md\\:grid-cols-2 {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    
+    .grid-cols-1.md\\:grid-cols-3 {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    
+    .grid-cols-1.md\\:grid-cols-4 {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+/* Mobile Phones (480px - 575px) */
+@media (max-width: 575px) and (min-width: 480px) {
+    .hightech-title {
+        font-size: 1.6rem;
+        letter-spacing: 1px;
+    }
+    
+    .glass-button {
+        padding: 10px 18px;
+        font-size: 12px;
+        width: 100%;
+        margin-bottom: 8px;
+    }
+    
+    .nav-item {
+        padding: 10px 14px;
+        margin-bottom: 4px;
+        font-size: 14px;
+    }
+    
+    .glass {
+        border-radius: 10px;
+    }
+    
+    .hightech-card {
+        padding: 14px;
+    }
+    
+    /* Further reduce animations */
+    .glass::before {
+        animation-duration: 5s;
+    }
+    
+    .nav-item::before {
+        animation-duration: 5s;
+    }
+    
+    /* Adjust table for mobile */
+    .hightech-table {
+        font-size: 12px;
+    }
+    
+    .hightech-table th {
+        font-size: 10px;
+        padding: 8px 4px;
+    }
+    
+    .hightech-table td {
+        font-size: 11px;
+        padding: 6px 4px;
+    }
+    
+    /* Stack all grids */
+    .grid-cols-1.sm\\:grid-cols-2,
+    .grid-cols-1.sm\\:grid-cols-3,
+    .grid-cols-1.sm\\:grid-cols-4 {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    
+    /* Adjust status badges */
+    .status-badge {
+        font-size: 10px;
+        padding: 2px 8px;
+    }
+    
+    /* Reduce cyber grid opacity for performance */
+    .cyber-grid {
+        opacity: 0.03;
+    }
+}
+
+/* Extra Small Mobile (320px - 479px) */
+@media (max-width: 479px) {
+    .hightech-title {
+        font-size: 1.4rem;
+        letter-spacing: 0.8px;
+    }
+    
+    .glass-button {
+        padding: 8px 16px;
+        font-size: 11px;
+        width: 100%;
+        margin-bottom: 6px;
+    }
+    
+    .nav-item {
+        padding: 8px 12px;
+        margin-bottom: 3px;
+        font-size: 13px;
+    }
+    
+    .glass {
+        border-radius: 8px;
+    }
+    
+    .hightech-card {
+        padding: 12px;
+    }
+    
+    /* Minimize animations for performance */
+    .glass::before {
+        animation: none;
+    }
+    
+    .nav-item::before {
+        animation: none;
+    }
+    
+    /* Simplify table */
+    .hightech-table {
+        font-size: 11px;
+    }
+    
+    .hightech-table th {
+        font-size: 9px;
+        padding: 6px 2px;
+        letter-spacing: 0.5px;
+    }
+    
+    .hightech-table td {
+        font-size: 10px;
+        padding: 4px 2px;
+    }
+    
+    /* Adjust inputs */
+    .glass-input {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+    
+    /* Adjust toggle switches */
+    .hightech-toggle {
+        width: 50px;
+        height: 25px;
+    }
+    
+    .hightech-toggle::before {
+        width: 18px;
+        height: 18px;
+        top: 3.5px;
+        left: 3.5px;
+    }
+    
+    .hightech-toggle.active::before {
+        left: 28px;
+    }
+    
+    /* Disable cyber grid for performance */
+    .cyber-grid {
+        display: none;
+    }
+    
+    /* Reduce background animations */
+    body::before {
+        animation-duration: 30s;
+    }
+    
+    body::after {
+        animation-duration: 20s;
+    }
+}
+
+/* Ultra Small Mobile (up to 319px) */
+@media (max-width: 319px) {
+    .hightech-title {
+        font-size: 1.2rem;
+        letter-spacing: 0.5px;
+    }
+    
+    .glass-button {
+        padding: 6px 12px;
+        font-size: 10px;
+    }
+    
+    .nav-item {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    
+    .glass {
+        border-radius: 6px;
+    }
+    
+    .hightech-card {
+        padding: 10px;
+    }
+    
+    /* Further simplify table */
+    .hightech-table th {
+        font-size: 8px;
+        padding: 4px 1px;
+    }
+    
+    .hightech-table td {
+        font-size: 9px;
+        padding: 3px 1px;
+    }
+    
+    /* Adjust status badges */
+    .status-badge {
+        font-size: 8px;
+        padding: 1px 6px;
+    }
+}
+
+/* Landscape orientation adjustments */
+@media (max-height: 600px) and (orientation: landscape) {
+    .hightech-title {
+        font-size: 1.6rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .glass {
+        padding: 12px;
+    }
+    
+    .nav-item {
+        padding: 8px 12px;
+        margin-bottom: 2px;
+    }
+    
+    .hightech-card {
+        padding: 12px;
+    }
+    
+    /* Reduce vertical spacing */
+    .space-y-4 > * + * {
+        margin-top: 0.75rem;
+    }
+    
+    .space-y-6 > * + * {
+        margin-top: 1rem;
+    }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .hightech-title {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    
+    .glass-button {
+        -webkit-font-smoothing: antialiased;
+    }
+    
+    /* Sharpen borders for high DPI */
+    .glass {
+        border-width: 0.5px;
+    }
+    
+    .nav-item {
+        border-width: 0.5px;
+    }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .glass::before,
+    .nav-item::before,
+    body::before,
+    body::after {
+        animation: none !important;
+    }
+    
+    .hightech-title {
+        animation: none !important;
+    }
+    
+    .hightech-progress-bar {
+        animation: none !important;
+    }
+}
+
+/* Dark mode preference (already dark, but ensure consistency) */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --light-text: #e8e8f0;
+        --dim-text: #9898a8;
+    }
+}
+
+/* Light mode preference (if needed) */
+@media (prefers-color-scheme: light) {
+    :root {
+        --light-text: #1a1a2e;
+        --dim-text: #4a4a5e;
+        --dark-bg: #f0f0f5;
+        --darker-bg: #e0e0e8;
+    }
+    
+    body {
+        background: linear-gradient(135deg, #f0f0f5 0%, #e0e0e8 25%, #d0d0d8 50%, #e0e0e8 75%, #f0f0f5 100%);
+    }
+}
+
+/* Print styles */
+@media print {
+    .cyber-grid,
+    body::before,
+    body::after,
+    .glass::before,
+    .nav-item::before {
+        display: none !important;
+    }
+    
+    .glass {
+        background: white !important;
+        border: 1px solid #ccc !important;
+        box-shadow: none !important;
+    }
+    
+    .hightech-title {
+        background: black !important;
+        -webkit-text-fill-color: white !important;
+        color: black !important;
+    }
+    
+    .glass-button {
+        background: black !important;
+        color: white !important;
+        border: 1px solid black !important;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .glass-button:hover,
+    .nav-item:hover,
+    .hightech-card:hover {
+        transform: none !important;
+    }
+    
+    .glass-button:active {
+        transform: scale(0.95);
+    }
+    
+    .nav-item:active {
+        transform: scale(0.98);
+    }
+    
+    /* Increase touch targets */
+    .glass-button {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    .nav-item {
+        min-height: 44px;
+    }
+    
+    .hightech-toggle {
+        min-height: 44px;
+        min-width: 60px;
+    }
+}
+
+/* Focus visible for keyboard navigation */
+@media (prefers-reduced-motion: no-preference) {
+    .glass-button:focus-visible,
+    .glass-input:focus-visible,
+    .nav-item:focus-visible,
+    .hightech-toggle:focus-visible {
+        outline: 2px solid var(--primary-cyan);
+        outline-offset: 2px;
+    }
+}
+
+/* Neon text effects */
+.neon-text {
+    color: var(--primary-cyan);
+    text-shadow: 
+        0 0 10px rgba(0, 255, 255, 0.8),
+        0 0 20px rgba(0, 255, 255, 0.6),
+        0 0 30px rgba(0, 255, 255, 0.4);
+}
+
+/* Glitch effect */
+.glitch {
+    position: relative;
+    animation: glitch 2s infinite;
+}
+
+@keyframes glitch {
+    0%, 100% { text-shadow: none; }
+    25% { text-shadow: -2px 0 var(--primary-red), 2px 0 var(--primary-cyan); }
+    50% { text-shadow: 2px 0 var(--primary-red), -2px 0 var(--primary-cyan); }
+    75% { text-shadow: 0 0 10px var(--primary-purple); }
+}
+
+/* Cyber grid overlay */
+.cyber-grid {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.1;
+    background-image: 
+        linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 100px 100px;
+    animation: grid-pulse 4s ease-in-out infinite;
+}
+
+@keyframes grid-pulse {
+    0%, 100% { opacity: 0.1; }
+    50% { opacity: 0.2; }
+}

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Immersive Real-Time Website</title>
+    <meta name="description" content="A fully immersive real-time website with chat, admin panel, and advanced features">
+    <meta name="keywords" content="immersive, real-time, chat, admin">
+    <meta name="author" content="Your Name">
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="immersive.css">
+    <link rel="stylesheet" href="modals.css">
+    
+    <!-- Netlify Database Service -->
+    <script src="netlify-database.js"></script>
+</head>
+<body class="min-h-screen relative overflow-y-auto">
+    <!-- Immersive particle system -->
+    <div class="particles-container">
+        <div class="particle particle-1"></div>
+        <div class="particle particle-2"></div>
+        <div class="particle particle-3"></div>
+        <div class="particle particle-4"></div>
+        <div class="particle particle-5"></div>
+    </div>
+    
+    <div class="container mx-auto px-4 py-8 relative z-10 min-h-screen">
+        <div class="max-w-md mx-auto pb-20 page-transition">
+            <!-- Header -->
+            <div class="text-center mb-8 float-animation">
+                <h1 class="text-5xl font-bold text-white mb-4 immersive-title">Welcome</h1>
+                <p class="text-white/80 text-lg">Enter your digital universe</p>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="immersive-glass rounded-2xl overflow-hidden interactive-hover">
+                <div class="flex border-b border-white/20">
+                    <button id="loginTab" class="flex-1 py-3 px-4 text-center font-medium text-white border-b-2 border-white transition-colors immersive-nav-item active" onclick="switchTab('login')">
+                        Login
+                    </button>
+                    <button id="signupTab" class="flex-1 py-3 px-4 text-center font-medium text-white/70 hover:text-white transition-colors immersive-nav-item" onclick="switchTab('signup')">
+                        Sign Up
+                    </button>
+                </div>
+
+                <!-- Login Form -->
+                <div id="loginForm" class="p-6">
+                    <form onsubmit="handleLogin(event)">
+                        <div class="mb-4">
+                            <label class="block text-white text-sm font-medium mb-2" for="loginEmail">
+                                <i class="fas fa-envelope mr-2"></i>Email
+                            </label>
+                            <input class="w-full px-3 py-2 immersive-input rounded-md focus:outline-none text-white placeholder-white/60" id="loginEmail" type="email" required placeholder="Enter your email">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-white text-sm font-medium mb-2" for="loginPassword">
+                                <i class="fas fa-lock mr-2"></i>Password
+                            </label>
+                            <div class="relative">
+                                <input class="w-full px-3 py-2 immersive-input rounded-md focus:outline-none text-white placeholder-white/60" id="loginPassword" type="password" required placeholder="Enter your password">
+                                <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/70 hover:text-white" onclick="togglePassword('loginPassword')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between mb-4">
+                            <label class="flex items-center">
+                                <input type="checkbox" id="rememberMe" class="mr-2 rounded border-white/30 bg-white/20 text-blue-600 focus:ring-blue-500">
+                                <span class="text-sm text-white">Remember me</span>
+                            </label>
+                            <button type="button" class="text-sm text-white/80 hover:text-white" onclick="showForgotPassword()">
+                                Forgot password?
+                            </button>
+                        </div>
+
+                        <button type="submit" class="w-full immersive-button text-white py-2 px-4 rounded-md font-medium ripple">
+                            Login
+                        </button>
+                    </form>
+                    
+                    <!-- Debug Info -->
+                    <div class="mt-4 p-2 bg-white/5 rounded text-xs text-white/60">
+                        <div id="debugInfo">Initializing...</div>
+                    </div>
+                </div>
+
+                <!-- Signup Form -->
+                <div id="signupForm" class="signup-scrollable p-6 hidden">
+                    <form onsubmit="handleSignup(event)">
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-white text-sm font-medium mb-2" for="firstName">
+                                    <i class="fas fa-user mr-2"></i>First Name
+                                </label>
+                                <input class="w-full px-3 py-2 immersive-input rounded-md focus:outline-none text-white placeholder-white/60" id="firstName" type="text" required placeholder="First name">
+                            </div>
+                            <div>
+                                <label class="block text-white text-sm font-medium mb-2" for="lastName">
+                                    Last Name
+                                </label>
+                                <input class="w-full px-3 py-2 immersive-input rounded-md focus:outline-none text-white placeholder-white/60" id="lastName" type="text" required placeholder="Last name">
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-white text-sm font-medium mb-2" for="signupEmail">
+                                <i class="fas fa-envelope mr-2"></i>Email
+                            </label>
+                            <input class="w-full px-3 py-2 immersive-input rounded-md focus:outline-none text-white placeholder-white/60" id="signupEmail" type="email" required placeholder="Enter your email">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-white text-sm font-medium mb-2" for="accountType">
+                                <i class="fas fa-user-tag mr-2"></i>Account Type
+                            </label>
+                            <select class="w-full px-3 py-2 immersive-input rounded-md focus:outline-none text-white" id="accountType" required>
+                                <option value="" class="text-gray-800">Select account type</option>
+                                <option value="student" class="text-gray-800">Student</option>
+                                <option value="teacher" class="text-gray-800">Teacher</option>
+                                <option value="admin" class="text-gray-800">Admin</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-white text-sm font-medium mb-2" for="classTrade">
+                                <i class="fas fa-graduation-cap mr-2"></i>Class/Trade
+                            </label>
+                            <select class="w-full px-3 py-2 immersive-input rounded-md focus:outline-none text-white" id="classTrade" required>
+                                <option value="" class="text-gray-800">Select class/trade</option>
+                                <option value="swd" class="text-gray-800">Software Development</option>
+                                <option value="acc" class="text-gray-800">Accounting</option>
+                                <option value="eng" class="text-gray-800">Engineering</option>
+                                <option value="med" class="text-gray-800">Medical</option>
+                                <option value="bus" class="text-gray-800">Business</option>
+                                <option value="art" class="text-gray-800">Arts</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-white text-sm font-medium mb-2">
+                                <i class="fas fa-venus-mars mr-2"></i>Gender
+                            </label>
+                            <div class="flex space-x-4">
+                                <label class="flex items-center">
+                                    <input type="radio" name="gender" value="male" class="mr-2 bg-white/20 border-white/30" required>
+                                    <span class="text-sm text-white">Male</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="gender" value="female" class="mr-2 bg-white/20 border-white/30" required>
+                                    <span class="text-sm text-white">Female</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-white text-sm font-medium mb-2" for="signupPassword">
+                                <i class="fas fa-lock mr-2"></i>Password
+                            </label>
+                            <div class="relative">
+                                <input class="w-full px-3 py-2 immersive-input rounded-md focus:outline-none text-white placeholder-white/60" id="signupPassword" type="password" required placeholder="Create a password" minlength="8">
+                                <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/70 hover:text-white" onclick="togglePassword('signupPassword')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-white text-sm font-medium mb-2" for="confirmPassword">
+                                <i class="fas fa-lock mr-2"></i>Confirm Password
+                            </label>
+                            <div class="relative">
+                                <input class="w-full px-3 py-2 immersive-input rounded-md focus:outline-none text-white placeholder-white/60" id="confirmPassword" type="password" required placeholder="Confirm your password">
+                                <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/70 hover:text-white" onclick="togglePassword('confirmPassword')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-white text-sm font-medium mb-2">
+                                <i class="fas fa-globe mr-2"></i>Account Definition
+                            </label>
+                            <div class="flex space-x-4">
+                                <label class="flex items-center">
+                                    <input type="radio" name="accountDefinition" value="private" class="mr-2 bg-white/20 border-white/30" required>
+                                    <span class="text-sm text-white">Private</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="accountDefinition" value="public" class="mr-2 bg-white/20 border-white/30" required>
+                                    <span class="text-sm text-white">Public</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full immersive-button text-white py-2 px-4 rounded-md font-medium ripple">
+                            Sign Up
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Success/Error Messages -->
+            <div id="messageContainer" class="mt-4 hidden">
+                <div id="messageContent" class="p-4 rounded-md"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50">
+        <div class="immersive-glass rounded-2xl p-6 max-w-md w-full mx-4 interactive-hover">
+            <h3 class="text-lg font-semibold mb-4 text-white">Reset Password</h3>
+            <p class="text-white/80 mb-4">Enter your email address and we'll send you instructions to reset your password.</p>
+            <form onsubmit="handleForgotPassword(event)">
+                <div class="mb-4">
+                    <label class="block text-white text-sm font-medium mb-2" for="resetEmail">
+                        Email Address
+                    </label>
+                    <input class="w-full px-3 py-2 immersive-input rounded-md focus:outline-none text-white placeholder-white/60" id="resetEmail" type="email" required placeholder="Enter your email">
+                </div>
+                <div class="flex space-x-3">
+                    <button type="submit" class="flex-1 immersive-button text-white py-2 px-4 rounded-md ripple">
+                        Send Reset Link
+                    </button>
+                    <button type="button" class="flex-1 bg-white/20 backdrop-blur-sm text-white py-2 px-4 rounded-md hover:bg-white/30 transition-colors" onclick="closeForgotPassword()">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="modals.js"></script>
+    <script src="immersive.js"></script>
+    <script src="realtime.js"></script>
+</body>
+</html>

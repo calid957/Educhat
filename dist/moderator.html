@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moderator Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="modals.css">
+    <link rel="stylesheet" href="immersive.css">
+</head>
+<body class="min-h-screen relative overflow-y-auto">
+    <!-- Immersive particle system -->
+    <div class="particles-container">
+        <div class="particle particle-1"></div>
+        <div class="particle particle-2"></div>
+        <div class="particle particle-3"></div>
+        <div class="particle particle-4"></div>
+        <div class="particle particle-5"></div>
+    </div>
+    
+    <div class="container mx-auto px-4 py-8 relative z-10 min-h-screen">
+        <div class="max-w-full mx-auto page-transition">
+            <!-- Header -->
+            <div class="text-center mb-8 float-animation">
+                <h1 class="text-4xl font-bold text-white mb-2 immersive-title">Moderator Panel</h1>
+                <p class="text-white/80 text-lg">User Management & Moderation</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <!-- Sidebar Navigation -->
+                <div class="lg:col-span-1">
+                    <div class="glass rounded-2xl p-4 sticky top-4">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full flex items-center justify-center text-white">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="ml-3">
+                                <h2 class="text-white font-semibold">Moderator</h2>
+                                <p class="text-white/60 text-sm">User Control</p>
+                            </div>
+                        </div>
+
+                        <nav class="space-y-2">
+                            <button onclick="showSection('banned-users')" class="nav-item w-full text-left p-3 rounded-lg text-white hover:bg-white/20 transition-colors flex items-center">
+                                <i class="fas fa-user-slash mr-3"></i>Banned Users
+                            </button>
+                            <button onclick="showSection('ban-management')" class="nav-item w-full text-left p-3 rounded-lg text-white hover:bg-white/20 transition-colors flex items-center">
+                                <i class="fas fa-gavel mr-3"></i>Ban Management
+                            </button>
+                            <button onclick="showSection('user-search')" class="nav-item w-full text-left p-3 rounded-lg text-white hover:bg-white/20 transition-colors flex items-center">
+                                <i class="fas fa-search mr-3"></i>User Search
+                            </button>
+                            <button onclick="showSection('ban-history')" class="nav-item w-full text-left p-3 rounded-lg text-white hover:bg-white/20 transition-colors flex items-center">
+                                <i class="fas fa-history mr-3"></i>Ban History
+                            </button>
+                        </nav>
+
+                        <div class="mt-6 pt-6 border-t border-white/20">
+                            <div class="glass p-3 rounded-lg mb-4">
+                                <p class="text-white/60 text-sm">Active Bans</p>
+                                <p class="text-2xl font-bold text-white" id="activeBansCount">0</p>
+                            </div>
+                            <button onclick="logout()" class="w-full bg-red-500/80 backdrop-blur-sm text-white py-2 px-4 rounded-lg hover:bg-red-600/80 transition-colors">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content Area -->
+                <div class="lg:col-span-3">
+                    <!-- Banned Users Section -->
+                    <div id="banned-users" class="section">
+                        <div class="glass rounded-2xl p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-xl font-semibold text-white">Banned Users</h3>
+                                <div class="flex space-x-2">
+                                    <input type="text" id="bannedUsersSearch" placeholder="Search banned users..." class="glass-input px-3 py-2 rounded-lg text-white placeholder-white/60">
+                                    <button onclick="searchBannedUsers()" class="glass-button px-4 py-2 rounded-lg text-white">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="bannedUsersGrid">
+                                <!-- Banned users will be displayed here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ban Management Section -->
+                    <div id="ban-management" class="section hidden">
+                        <div class="glass rounded-2xl p-6">
+                            <h3 class="text-xl font-semibold text-white mb-4">Ban Management</h3>
+                            
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <!-- Ban User Form -->
+                                <div>
+                                    <h4 class="text-lg font-medium text-white mb-3">Ban User</h4>
+                                    <form onsubmit="banUser(event)" class="space-y-4">
+                                        <div>
+                                            <label class="block text-white text-sm font-medium mb-2">User Email</label>
+                                            <input type="email" id="banUserEmail" placeholder="Enter user email" class="w-full glass-input px-3 py-2 rounded-lg text-white placeholder-white/60" required>
+                                        </div>
+                                        <div>
+                                            <label class="block text-white text-sm font-medium mb-2">Ban Reason</label>
+                                            <textarea id="banReason" placeholder="Enter ban reason" rows="3" class="w-full glass-input px-3 py-2 rounded-lg text-white placeholder-white/60" required></textarea>
+                                        </div>
+                                        <div>
+                                            <label class="block text-white text-sm font-medium mb-2">Ban Duration (hours)</label>
+                                            <select id="banDuration" class="w-full glass-input px-3 py-2 rounded-lg text-white" required>
+                                                <option value="1">1 Hour</option>
+                                                <option value="6">6 Hours</option>
+                                                <option value="12">12 Hours</option>
+                                                <option value="24" selected>24 Hours</option>
+                                                <option value="72">3 Days</option>
+                                                <option value="168">1 Week</option>
+                                                <option value="720">1 Month</option>
+                                                <option value="2160">3 Months</option>
+                                                <option value="4320">6 Months</option>
+                                                <option value="8760">1 Year</option>
+                                                <option value="permanent">Permanent</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="w-full glass-button px-4 py-2 rounded-lg text-white">
+                                            <i class="fas fa-gavel mr-2"></i>Ban User
+                                        </button>
+                                    </form>
+                                </div>
+
+                                <!-- Quick Actions -->
+                                <div>
+                                    <h4 class="text-lg font-medium text-white mb-3">Quick Actions</h4>
+                                    <div class="space-y-3">
+                                        <div class="glass p-4 rounded-lg">
+                                            <h5 class="text-white font-medium mb-2">Recent Violations</h5>
+                                            <div id="recentViolations" class="space-y-2 max-h-32 overflow-y-auto">
+                                                <!-- Recent violations will be listed here -->
+                                            </div>
+                                        </div>
+                                        <div class="glass p-4 rounded-lg">
+                                            <h5 class="text-white font-medium mb-2">Ban Statistics</h5>
+                                            <div class="grid grid-cols-2 gap-2">
+                                                <div>
+                                                    <p class="text-white/60 text-xs">Today</p>
+                                                    <p class="text-white font-bold" id="todayBans">0</p>
+                                                </div>
+                                                <div>
+                                                    <p class="text-white/60 text-xs">This Week</p>
+                                                    <p class="text-white font-bold" id="weekBans">0</p>
+                                                </div>
+                                                <div>
+                                                    <p class="text-white/60 text-xs">This Month</p>
+                                                    <p class="text-white font-bold" id="monthBans">0</p>
+                                                </div>
+                                                <div>
+                                                    <p class="text-white/60 text-xs">Total</p>
+                                                    <p class="text-white font-bold" id="totalBans">0</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User Search Section -->
+                    <div id="user-search" class="section hidden">
+                        <div class="glass rounded-2xl p-6">
+                            <h3 class="text-xl font-semibold text-white mb-4">User Search</h3>
+                            
+                            <div class="mb-4">
+                                <div class="flex space-x-2">
+                                    <input type="text" id="userSearchInput" placeholder="Search users by name, email, or class..." class="flex-1 glass-input px-3 py-2 rounded-lg text-white placeholder-white/60">
+                                    <button onclick="searchUsers()" class="glass-button px-4 py-2 rounded-lg text-white">
+                                        <i class="fas fa-search"></i> Search
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="flex space-x-2">
+                                    <select id="accountTypeFilter" class="glass-input px-3 py-2 rounded-lg text-white">
+                                        <option value="">All Account Types</option>
+                                        <option value="student">Student</option>
+                                        <option value="teacher">Teacher</option>
+                                        <option value="admin">Admin</option>
+                                    </select>
+                                    <select id="classFilter" class="glass-input px-3 py-2 rounded-lg text-white">
+                                        <option value="">All Classes</option>
+                                        <option value="swd">Software Development</option>
+                                        <option value="acc">Accounting</option>
+                                        <option value="eng">Engineering</option>
+                                        <option value="med">Medical</option>
+                                        <option value="bus">Business</option>
+                                        <option value="art">Arts</option>
+                                    </select>
+                                    <select id="statusFilter" class="glass-input px-3 py-2 rounded-lg text-white">
+                                        <option value="">All Status</option>
+                                        <option value="active">Active</option>
+                                        <option value="banned">Banned</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-white">
+                                    <thead>
+                                        <tr class="border-b border-white/20">
+                                            <th class="text-left p-3">User</th>
+                                            <th class="text-left p-3">Account Type</th>
+                                            <th class="text-left p-3">Class/Trade</th>
+                                            <th class="text-left p-3">Status</th>
+                                            <th class="text-left p-3">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="userSearchResults">
+                                        <!-- Search results will be displayed here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ban History Section -->
+                    <div id="ban-history" class="section hidden">
+                        <div class="glass rounded-2xl p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-xl font-semibold text-white">Ban History</h3>
+                                <div class="flex space-x-2">
+                                    <input type="text" id="banHistorySearch" placeholder="Search ban history..." class="glass-input px-3 py-2 rounded-lg text-white placeholder-white/60">
+                                    <button onclick="searchBanHistory()" class="glass-button px-4 py-2 rounded-lg text-white">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-white">
+                                    <thead>
+                                        <tr class="border-b border-white/20">
+                                            <th class="text-left p-3">User</th>
+                                            <th class="text-left p-3">Reason</th>
+                                            <th class="text-left p-3">Duration</th>
+                                            <th class="text-left p-3">Banned By</th>
+                                            <th class="text-left p-3">Ban Date</th>
+                                            <th class="text-left p-3">Status</th>
+                                            <th class="text-left p-3">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="banHistoryTable">
+                                        <!-- Ban history will be displayed here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ban Details Modal -->
+    <div id="banDetailsModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50">
+        <div class="glass-modal rounded-2xl p-6 max-w-md w-full mx-4">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Ban Details</h3>
+            <div id="banDetailsContent">
+                <!-- Ban details will be displayed here -->
+            </div>
+            <div class="flex space-x-3 mt-4">
+                <button onclick="closeBanDetailsModal()" class="flex-1 bg-gray-300/80 backdrop-blur-sm text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400/80 transition-colors">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Ban Modal -->
+    <div id="editBanModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50">
+        <div class="glass-modal rounded-2xl p-6 max-w-md w-full mx-4">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Edit Ban</h3>
+            <form onsubmit="updateBan(event)" class="space-y-4">
+                <input type="hidden" id="editBanUserId">
+                <div>
+                    <label class="block text-gray-700 text-sm font-medium mb-2">User Email</label>
+                    <input type="text" id="editBanEmail" class="w-full px-3 py-2 glass-input rounded-md focus:outline-none text-gray-800" readonly>
+                </div>
+                <div>
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Ban Reason</label>
+                    <textarea id="editBanReason" rows="3" class="w-full px-3 py-2 glass-input rounded-md focus:outline-none text-gray-800" required></textarea>
+                </div>
+                <div>
+                    <label class="block text-gray-700 text-sm font-medium mb-2">New Duration (hours)</label>
+                    <select id="editBanDuration" class="w-full px-3 py-2 glass-input rounded-md focus:outline-none text-gray-800" required>
+                        <option value="1">1 Hour</option>
+                        <option value="6">6 Hours</option>
+                        <option value="12">12 Hours</option>
+                        <option value="24">24 Hours</option>
+                        <option value="72">3 Days</option>
+                        <option value="168">1 Week</option>
+                        <option value="720">1 Month</option>
+                        <option value="2160">3 Months</option>
+                        <option value="4320">6 Months</option>
+                        <option value="8760">1 Year</option>
+                        <option value="permanent">Permanent</option>
+                    </select>
+                </div>
+                <div class="flex space-x-3">
+                    <button type="submit" class="flex-1 glass-button text-white py-2 px-4 rounded-md">
+                        Update Ban
+                    </button>
+                    <button type="button" onclick="closeEditBanModal()" class="flex-1 bg-gray-300/80 backdrop-blur-sm text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400/80 transition-colors">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div id="messageContainer" class="fixed top-4 right-4 z-50 hidden">
+        <div id="messageContent" class="p-4 rounded-md animate-slide-in"></div>
+    </div>
+
+    <script src="moderator.js"></script>
+    <script src="modals.js"></script>
+    <script src="immersive.js"></script>
+    <script src="realtime.js"></script>
+</body>
+</html>

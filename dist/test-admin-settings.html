@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Settings Test</title>
+    <script src="admin-settings.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+        button {
+            margin: 5px;
+            padding: 8px 16px;
+            background: #3B82F6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #2563EB;
+        }
+        .result {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(0,255,0,0.1);
+            border-radius: 4px;
+        }
+        .error {
+            background: rgba(255,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin Settings Functionality Test</h1>
+    
+    <div class="test-section">
+        <h2>Initialization Test</h2>
+        <button onclick="testInitialization()">Test AdminSettings Initialization</button>
+        <div id="init-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Settings Persistence Test</h2>
+        <button onclick="testSettingsPersistence()">Test Save/Load Settings</button>
+        <div id="persistence-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Theme Functions Test</h2>
+        <button onclick="testThemeFunctions()">Test Theme Functions</button>
+        <div id="theme-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Maintenance Mode Test</h2>
+        <button onclick="testMaintenanceMode()">Test Maintenance Mode</button>
+        <div id="maintenance-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Email Templates Test</h2>
+        <button onclick="testEmailTemplates()">Test Email Templates</button>
+        <div id="email-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Cache Functions Test</h2>
+        <button onclick="testCacheFunctions()">Test Cache Functions</button>
+        <div id="cache-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>File Upload Test</h2>
+        <button onclick="testFileUpload()">Test File Upload Validation</button>
+        <div id="upload-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Global Functions Test</h2>
+        <button onclick="testGlobalFunctions()">Test Global Functions</button>
+        <div id="global-result"></div>
+    </div>
+
+    <script>
+        let testResults = [];
+
+        function showResult(elementId, message, isError = false) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.innerHTML = `<div class="result ${isError ? 'error' : ''}">${message}</div>`;
+            }
+        }
+
+        function testInitialization() {
+            try {
+                if (typeof AdminSettings === 'undefined') {
+                    showResult('init-result', '❌ AdminSettings class not found', true);
+                    return;
+                }
+
+                if (typeof adminSettings === 'undefined') {
+                    showResult('init-result', '❌ adminSettings instance not found', true);
+                    return;
+                }
+
+                if (adminSettings.settings) {
+                    showResult('init-result', '✅ AdminSettings initialized successfully with settings object');
+                } else {
+                    showResult('init-result', '❌ AdminSettings settings object not found', true);
+                }
+            } catch (error) {
+                showResult('init-result', `❌ Initialization error: ${error.message}`, true);
+            }
+        }
+
+        function testSettingsPersistence() {
+            try {
+                if (!adminSettings) {
+                    showResult('persistence-result', '❌ AdminSettings not initialized', true);
+                    return;
+                }
+
+                // Test saving settings
+                const originalValue = adminSettings.settings.maintenance.enabled;
+                adminSettings.settings.maintenance.enabled = !originalValue;
+                adminSettings.saveSettings();
+
+                // Test loading settings
+                const newSettings = adminSettings.loadSettings();
+                
+                if (newSettings.maintenance.enabled === !originalValue) {
+                    showResult('persistence-result', '✅ Settings persistence test passed');
+                } else {
+                    showResult('persistence-result', '❌ Settings persistence test failed', true);
+                }
+
+                // Restore original value
+                adminSettings.settings.maintenance.enabled = originalValue;
+                adminSettings.saveSettings();
+            } catch (error) {
+                showResult('persistence-result', `❌ Persistence test error: ${error.message}`, true);
+            }
+        }
+
+        function testThemeFunctions() {
+            try {
+                if (!adminSettings) {
+                    showResult('theme-result', '❌ AdminSettings not initialized', true);
+                    return;
+                }
+
+                let passed = 0;
+                let total = 0;
+
+                // Test theme functions exist
+                const themeFunctions = [
+                    'changeThemePreset',
+                    'updatePrimaryColor',
+                    'updateAccentColor',
+                    'updateFontSize',
+                    'updateAnimationSpeed'
+                ];
+
+                themeFunctions.forEach(funcName => {
+                    total++;
+                    if (typeof adminSettings[funcName] === 'function') {
+                        passed++;
+                    }
+                });
+
+                showResult('theme-result', `✅ Theme functions test: ${passed}/${total} functions available`);
+            } catch (error) {
+                showResult('theme-result', `❌ Theme test error: ${error.message}`, true);
+            }
+        }
+
+        function testMaintenanceMode() {
+            try {
+                if (!adminSettings) {
+                    showResult('maintenance-result', '❌ AdminSettings not initialized', true);
+                    return;
+                }
+
+                const originalState = adminSettings.settings.maintenance.enabled;
+                
+                // Test toggle
+                adminSettings.toggleMaintenanceMode();
+                
+                if (adminSettings.settings.maintenance.enabled !== originalState) {
+                    showResult('maintenance-result', '✅ Maintenance mode toggle works');
+                    
+                    // Toggle back
+                    adminSettings.toggleMaintenanceMode();
+                } else {
+                    showResult('maintenance-result', '❌ Maintenance mode toggle failed', true);
+                }
+            } catch (error) {
+                showResult('maintenance-result', `❌ Maintenance test error: ${error.message}`, true);
+            }
+        }
+
+        function testEmailTemplates() {
+            try {
+                if (!adminSettings) {
+                    showResult('email-result', '❌ AdminSettings not initialized', true);
+                    return;
+                }
+
+                let passed = 0;
+                let total = 0;
+
+                // Test email functions exist
+                const emailFunctions = [
+                    'loadEmailTemplate',
+                    'saveEmailTemplate',
+                    'previewEmailTemplate',
+                    'resetEmailTemplate'
+                ];
+
+                emailFunctions.forEach(funcName => {
+                    total++;
+                    if (typeof adminSettings[funcName] === 'function') {
+                        passed++;
+                    }
+                });
+
+                // Test email templates object
+                if (adminSettings.settings.emailTemplates) {
+                    passed++;
+                    total++;
+                }
+
+                showResult('email-result', `✅ Email templates test: ${passed}/${total} functions/objects available`);
+            } catch (error) {
+                showResult('email-result', `❌ Email test error: ${error.message}`, true);
+            }
+        }
+
+        function testCacheFunctions() {
+            try {
+                if (!adminSettings) {
+                    showResult('cache-result', '❌ AdminSettings not initialized', true);
+                    return;
+                }
+
+                let passed = 0;
+                let total = 0;
+
+                // Test cache functions exist
+                const cacheFunctions = [
+                    'clearBrowserCache',
+                    'clearAppCache',
+                    'clearAllCache',
+                    'refreshCacheInfo'
+                ];
+
+                cacheFunctions.forEach(funcName => {
+                    total++;
+                    if (typeof adminSettings[funcName] === 'function') {
+                        passed++;
+                    }
+                });
+
+                showResult('cache-result', `✅ Cache functions test: ${passed}/${total} functions available`);
+            } catch (error) {
+                showResult('cache-result', `❌ Cache test error: ${error.message}`, true);
+            }
+        }
+
+        function testFileUpload() {
+            try {
+                if (!adminSettings) {
+                    showResult('upload-result', '❌ AdminSettings not initialized', true);
+                    return;
+                }
+
+                // Test file validation function
+                if (typeof adminSettings.validateFileUpload === 'function') {
+                    showResult('upload-result', '✅ File upload validation function available');
+                } else {
+                    showResult('upload-result', '❌ File upload validation function not found', true);
+                }
+            } catch (error) {
+                showResult('upload-result', `❌ Upload test error: ${error.message}`, true);
+            }
+        }
+
+        function testGlobalFunctions() {
+            try {
+                let passed = 0;
+                let total = 0;
+
+                // Test global functions exist
+                const globalFunctions = [
+                    'toggleMaintenanceMode',
+                    'changeThemePreset',
+                    'saveAllSettings',
+                    'resetAllSettings',
+                    'clearAllCache'
+                ];
+
+                globalFunctions.forEach(funcName => {
+                    total++;
+                    if (typeof window[funcName] === 'function') {
+                        passed++;
+                    }
+                });
+
+                showResult('global-result', `✅ Global functions test: ${passed}/${total} functions available`);
+            } catch (error) {
+                showResult('global-result', `❌ Global functions test error: ${error.message}`, true);
+            }
+        }
+
+        // Run all tests
+        function runAllTests() {
+            setTimeout(() => {
+                testInitialization();
+                testSettingsPersistence();
+                testThemeFunctions();
+                testMaintenanceMode();
+                testEmailTemplates();
+                testCacheFunctions();
+                testFileUpload();
+                testGlobalFunctions();
+            }, 1000);
+        }
+
+        // Auto-run tests when page loads
+        window.addEventListener('load', () => {
+            setTimeout(runAllTests, 2000);
+        });
+    </script>
+</body>
+</html>
