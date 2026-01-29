@@ -13,6 +13,31 @@ async function initializeChatDatabase() {
         const request = indexedDB.open('ImmersiveAppDB', 1);
         
         request.onerror = () => reject(request.error);
+        
+        request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+            
+            // Create object stores if they don't exist
+            if (!db.objectStoreNames.contains('messages')) {
+                const messagesStore = db.createObjectStore('messages', { keyPath: 'id', autoIncrement: true });
+                messagesStore.createIndex('chatId', 'chatId', { unique: false });
+                messagesStore.createIndex('timestamp', 'timestamp', { unique: false });
+            }
+            
+            if (!db.objectStoreNames.contains('users')) {
+                const usersStore = db.createObjectStore('users', { keyPath: 'email' });
+                usersStore.createIndex('accountType', 'accountType', { unique: false });
+            }
+            
+            if (!db.objectStoreNames.contains('channels')) {
+                const channelsStore = db.createObjectStore('channels', { keyPath: 'id', autoIncrement: true });
+                channelsStore.createIndex('type', 'type', { unique: false });
+                channelsStore.createIndex('createdBy', 'createdBy', { unique: false });
+            }
+            
+            console.log('Database schema created');
+        };
+        
         request.onsuccess = () => {
             db = request.result;
             console.log('Chat database initialized');
@@ -95,22 +120,62 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
     
     try {
-        // Initialize database
-        await initializeChatDatabase();
+        // Initialize database with timeout
+        const dbPromise = initializeChatDatabase();
+        const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Database initialization timeout')), 5000)
+        );
         
-        // Load data from database
-        await loadMessagesFromDatabase();
-        await loadChannelsFromDatabase();
+        await Promise.race([dbPromise, timeoutPromise]);
+        
+        // Load data from database with fallback
+        try {
+            await loadMessagesFromDatabase();
+        } catch (error) {
+            console.warn('Failed to load messages from database, using empty array:', error);
+            messages = { public: [], private: {}, groups: {} };
+        }
+        
+        loadChannels(); // Changed from loadChannelsFromDatabase()
         
         initializeChat();
-        loadOnlineUsers();
+        
+        // Load online users with error handling
+        try {
+            await loadOnlineUsers();
+        } catch (error) {
+            console.warn('Failed to load online users:', error);
+        }
+        
         setupRealtimeListeners();
         setupTypingIndicator();
         
-        console.log('Chat initialized with database');
+        console.log('Chat initialized successfully');
+        
+        // Hide any loading messages
+        const loadingElements = document.querySelectorAll('.loading-message');
+        loadingElements.forEach(el => el.style.display = 'none');
+        
     } catch (error) {
         console.error('Chat initialization failed:', error);
-        showMessage('Failed to initialize chat. Please refresh the page.', 'error');
+        
+        // Fallback initialization
+        try {
+            messages = { public: [], private: {}, groups: {} };
+            channels = [];
+            onlineUsers = [];
+            initializeChat();
+            setupTypingIndicator();
+            console.log('Chat initialized with fallback mode');
+            
+            // Hide loading messages
+            const loadingElements = document.querySelectorAll('.loading-message');
+            loadingElements.forEach(el => el.style.display = 'none');
+            
+        } catch (fallbackError) {
+            console.error('Fallback initialization also failed:', fallbackError);
+            showMessage('Failed to initialize chat. Please refresh the page.', 'error');
+        }
     }
 });
 
