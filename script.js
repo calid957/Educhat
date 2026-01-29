@@ -311,33 +311,63 @@ async function handleLogin(event) {
     try {
         const user = await dbService.loginUser(email, password);
         
-        console.log('User found:', user ? user.email : 'No user found');
+        console.log('User found via Netlify:', user ? user.email : 'No user found');
         updateDebugInfo(user ? `User found: ${user.email}` : 'User not found');
         
         if (user) {
-            currentUser = user;
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            
-            console.log('Login successful, redirecting to:', user.accountType);
-            updateDebugInfo(`Login success! Redirecting to ${user.accountType}...`);
-            
-            if (rememberMe) {
-                localStorage.setItem('rememberedUser', email);
-            } else {
-                localStorage.removeItem('rememberedUser');
-            }
-            
-            showMessage('Login successful! Redirecting...', 'success');
-            
-            // Clear form
-            document.getElementById('loginEmail').value = '';
-            document.getElementById('loginPassword').value = '';
-            document.getElementById('rememberMe').checked = false;
-            
-            // Immediate redirect attempt
+            // Netlify login successful
+            handleSuccessfulLogin(user, rememberMe);
+        } else {
+            // Try localStorage fallback
+            console.log('Netlify login failed, trying localStorage fallback...');
+            await tryLocalStorageLogin(email, password, rememberMe);
+        }
+    } catch (error) {
+        console.error('Netlify login error, trying localStorage fallback:', error);
+        updateDebugInfo('Netlify login failed, trying localStorage...');
+        await tryLocalStorageLogin(email, password, rememberMe);
+    }
+}
+
+// Handle successful login (common logic for both Netlify and localStorage)
+function handleSuccessfulLogin(user, rememberMe) {
+    currentUser = user;
+    localStorage.setItem('currentUser', JSON.stringify(user));
+    
+    console.log('Login successful, redirecting to:', user.accountType);
+    updateDebugInfo(`Login success! Redirecting to ${user.accountType}...`);
+    
+    if (rememberMe) {
+        localStorage.setItem('rememberedUser', user.email);
+    } else {
+        localStorage.removeItem('rememberedUser');
+    }
+    
+    showMessage('Login successful! Redirecting...', 'success');
+    
+    // Clear form
+    document.getElementById('loginEmail').value = '';
+    document.getElementById('loginPassword').value = '';
+    document.getElementById('rememberMe').checked = false;
+    
+    // Immediate redirect attempt
+    try {
+        console.log('Immediate redirect to:', user.accountType);
+        updateDebugInfo(`Executing redirect to ${user.accountType}.html...`);
+        if (user.accountType === 'admin') {
+            window.location.href = 'admin.html';
+        } else if (user.accountType === 'moderator') {
+            window.location.href = 'moderator.html';
+        } else {
+            window.location.href = 'chat.html';
+        }
+    } catch (error) {
+        console.error('Immediate redirect failed, trying timeout:', error);
+        updateDebugInfo('Redirect failed, trying fallback...');
+        // Fallback redirect with timeout
+        setTimeout(() => {
+            console.log('Fallback redirect to:', user.accountType);
             try {
-                console.log('Immediate redirect to:', user.accountType);
-                updateDebugInfo(`Executing redirect to ${user.accountType}.html...`);
                 if (user.accountType === 'admin') {
                     window.location.href = 'admin.html';
                 } else if (user.accountType === 'moderator') {
@@ -345,35 +375,37 @@ async function handleLogin(event) {
                 } else {
                     window.location.href = 'chat.html';
                 }
-            } catch (error) {
-                console.error('Immediate redirect failed, trying timeout:', error);
-                updateDebugInfo('Redirect failed, trying fallback...');
-                // Fallback redirect with timeout
-                setTimeout(() => {
-                    console.log('Fallback redirect to:', user.accountType);
-                    try {
-                        if (user.accountType === 'admin') {
-                            window.location.href = 'admin.html';
-                        } else if (user.accountType === 'moderator') {
-                            window.location.href = 'moderator.html';
-                        } else {
-                            window.location.href = 'chat.html';
-                        }
-                    } catch (redirectError) {
-                        console.error('Fallback redirect also failed:', redirectError);
-                        updateDebugInfo('All redirects failed!');
-                        window.location.href = 'chat.html';
-                    }
-                }, 1000);
+            } catch (redirectError) {
+                console.error('Fallback redirect also failed:', redirectError);
+                updateDebugInfo('All redirects failed!');
+                window.location.href = 'chat.html';
             }
+        }, 1000);
+    }
+}
+
+// Try localStorage login fallback
+async function tryLocalStorageLogin(email, password, rememberMe) {
+    try {
+        // Load users from localStorage
+        const localStorageUsers = JSON.parse(localStorage.getItem('users')) || [];
+        console.log('Checking localStorage users:', localStorageUsers.length);
+        
+        const user = localStorageUsers.find(u => u.email === email && u.password === password);
+        
+        if (user) {
+            console.log('User found in localStorage:', user.email);
+            updateDebugInfo(`User found in localStorage: ${user.email}`);
+            handleSuccessfulLogin(user, rememberMe);
         } else {
-            console.log('Login failed: Invalid credentials');
+            console.log('Login failed: Invalid credentials in localStorage');
+            updateDebugInfo('Login failed: Invalid credentials');
             showMessage('Invalid email or password. Please try again.', 'error');
         }
     } catch (error) {
-        console.error('Login error:', error);
+        console.error('LocalStorage login error:', error);
+        updateDebugInfo('LocalStorage login error: ' + error.message);
         showMessage('Login failed. Please try again.', 'error');
-        updateDebugInfo('Login error: ' + error.message);
     }
 }
 

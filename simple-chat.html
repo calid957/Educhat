@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-6">Simple Chat Test</h1>
+        
+        <div id="status" class="mb-4 p-4 bg-gray-800 rounded">
+            Loading...
+        </div>
+        
+        <div id="chat-container" class="hidden">
+            <div id="messages" class="mb-4 p-4 bg-gray-800 rounded h-64 overflow-y-auto">
+                <p class="text-gray-400">Welcome to chat!</p>
+            </div>
+            
+            <div class="flex">
+                <input type="text" id="message-input" placeholder="Type a message..." 
+                       class="flex-1 p-2 bg-gray-700 rounded-l">
+                <button onclick="sendMessage()" class="p-2 bg-blue-600 rounded-r hover:bg-blue-700">
+                    Send
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log('=== SIMPLE CHAT START ===');
+        
+        let currentUser = null;
+        
+        // Simple initialization
+        function initChat() {
+            console.log('Initializing simple chat...');
+            
+            try {
+                // Get current user
+                currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                console.log('User from localStorage:', currentUser);
+                
+                if (!currentUser) {
+                    console.log('No user found');
+                    document.getElementById('status').innerHTML = 
+                        '<p class="text-red-400">No user found. Please <a href="index.html" class="underline">login</a> first.</p>';
+                    return;
+                }
+                
+                // Show success
+                document.getElementById('status').innerHTML = 
+                    `<p class="text-green-400">Welcome ${currentUser.firstName}! Chat is ready.</p>`;
+                
+                // Show chat interface
+                document.getElementById('chat-container').classList.remove('hidden');
+                
+                // Setup message input
+                const input = document.getElementById('message-input');
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        sendMessage();
+                    }
+                });
+                
+                console.log('Simple chat initialized successfully');
+                
+            } catch (error) {
+                console.error('Simple chat initialization failed:', error);
+                document.getElementById('status').innerHTML = 
+                    `<p class="text-red-400">Error: ${error.message}</p>`;
+            }
+        }
+        
+        function sendMessage() {
+            const input = document.getElementById('message-input');
+            const message = input.value.trim();
+            
+            if (!message || !currentUser) return;
+            
+            const messagesDiv = document.getElementById('messages');
+            const messageEl = document.createElement('div');
+            messageEl.className = 'mb-2 p-2 bg-blue-600 rounded';
+            messageEl.innerHTML = `<strong>${currentUser.firstName}:</strong> ${message}`;
+            
+            messagesDiv.appendChild(messageEl);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            input.value = '';
+        }
+        
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initChat);
+        } else {
+            initChat();
+        }
+        
+        console.log('=== SIMPLE CHAT SCRIPT LOADED ===');
+    </script>
+</body>
+</html>

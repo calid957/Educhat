@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Interface - Debug</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="modals.css">
+    <link rel="stylesheet" href="immersive.css">
+</head>
+<body class="min-h-screen relative overflow-y-auto">
+    <!-- Debug Panel -->
+    <div class="fixed top-0 left-0 right-0 bg-black/80 text-white p-4 z-50">
+        <h3>Debug Panel</h3>
+        <div id="debug-log">Loading debug info...</div>
+    </div>
+
+    <!-- Immersive particle system -->
+    <div class="particles-container">
+        <div class="particle particle-1"></div>
+        <div class="particle particle-2"></div>
+        <div class="particle particle-3"></div>
+        <div class="particle particle-4"></div>
+        <div class="particle particle-5"></div>
+    </div>
+    
+    <div class="container mx-auto px-4 py-8 relative z-10 min-h-screen" style="margin-top: 120px;">
+        <div class="max-w-full mx-auto page-transition">
+            <!-- Header -->
+            <div class="text-center mb-6 float-animation">
+                <h1 class="text-4xl font-bold text-white mb-2 immersive-title">Chat Interface - Debug</h1>
+                <p class="text-white/80 text-lg">Connect with others</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <!-- Sidebar - Chat List -->
+                <div class="lg:col-span-1">
+                    <div class="immersive-glass rounded-2xl p-4 mb-4 interactive-hover">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-semibold text-white">Chats</h2>
+                        </div>
+                        
+                        <!-- Chat List -->
+                        <div id="chatList" class="space-y-2 max-h-96 overflow-y-auto stagger-animation">
+                            <!-- Public Chat -->
+                            <div onclick="selectChat('public', 'Public Chat')" class="chat-item immersive-glass p-3 rounded-lg cursor-pointer hover:bg-white/30 transition-colors interactive-hover">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white">
+                                        <i class="fas fa-globe"></i>
+                                    </div>
+                                    <div class="ml-3">
+                                        <h3 class="text-white font-medium">Public Chat</h3>
+                                        <p class="text-white/60 text-sm">All users</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Chat Area -->
+                <div class="lg:col-span-3">
+                    <div class="immersive-glass rounded-2xl h-[600px] flex flex-col">
+                        <!-- Chat Header -->
+                        <div id="chatHeader" class="border-b border-white/20 p-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div id="chatAvatar" class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white">
+                                        <i class="fas fa-globe"></i>
+                                    </div>
+                                    <div class="ml-3">
+                                        <h2 id="chatName" class="text-white font-semibold">Public Chat</h2>
+                                        <p id="chatStatus" class="text-white/60 text-sm">All users • 0 online</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Messages Area -->
+                        <div id="messagesArea" class="flex-1 overflow-y-auto p-4 space-y-4">
+                            <!-- Messages will be displayed here -->
+                            <div class="text-center text-white/60 py-8 pulse-animation">
+                                <i class="fas fa-comments text-4xl mb-4"></i>
+                                <p>Welcome to the chat! Start a conversation below.</p>
+                            </div>
+                        </div>
+
+                        <!-- Typing Indicator -->
+                        <div id="typingIndicator" class="px-4 py-2 text-white/60 text-sm"></div>
+
+                        <!-- Message Input -->
+                        <div class="border-t border-white/20 p-4">
+                            <form onsubmit="return sendMessage(event)" class="flex space-x-2">
+                                <input 
+                                    type="text" 
+                                    id="messageInput" 
+                                    placeholder="Type a message..." 
+                                    class="flex-1 immersive-input rounded-full px-4 py-2 text-white placeholder-white/60 focus:outline-none"
+                                    required
+                                >
+                                <button type="submit" class="immersive-button text-white px-4 py-2 rounded-full magnetic-button ripple">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div id="messageContainer" class="fixed top-4 right-4 z-50 hidden">
+        <div id="messageContent" class="p-4 rounded-md animate-slide-in"></div>
+    </div>
+
+    <script>
+        // Debug logging
+        function debugLog(message) {
+            const debugLog = document.getElementById('debug-log');
+            if (debugLog) {
+                debugLog.innerHTML += '<div>' + new Date().toLocaleTimeString() + ': ' + message + '</div>';
+            }
+            console.log('[DEBUG]', message);
+        }
+
+        debugLog('Debug chat page loading...');
+
+        // Simple initialization without complex dependencies
+        document.addEventListener('DOMContentLoaded', function() {
+            debugLog('DOM loaded');
+            
+            try {
+                // Check user
+                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                debugLog('User check: ' + (currentUser ? currentUser.firstName : 'No user'));
+                
+                if (!currentUser) {
+                    debugLog('No user found, redirecting...');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
+                    return;
+                }
+                
+                // Test DOM elements
+                const elements = ['messagesArea', 'typingIndicator', 'messageInput', 'chatName'];
+                elements.forEach(id => {
+                    const el = document.getElementById(id);
+                    debugLog('Element ' + id + ': ' + (el ? 'FOUND' : 'MISSING'));
+                });
+                
+                // Simple message sending
+                window.sendMessage = function(event) {
+                    event.preventDefault();
+                    debugLog('Send message called');
+                    
+                    const input = document.getElementById('messageInput');
+                    const message = input.value.trim();
+                    
+                    if (message && currentUser) {
+                        const messagesArea = document.getElementById('messagesArea');
+                        const messageEl = document.createElement('div');
+                        messageEl.className = 'mb-2 p-2 bg-blue-600 rounded';
+                        messageEl.innerHTML = `<strong>${currentUser.firstName}:</strong> ${message}`;
+                        
+                        messagesArea.appendChild(messageEl);
+                        messagesArea.scrollTop = messagesArea.scrollHeight;
+                        
+                        input.value = '';
+                        debugLog('Message sent: ' + message);
+                    }
+                };
+                
+                debugLog('Debug chat initialized successfully');
+                
+            } catch (error) {
+                debugLog('ERROR: ' + error.message);
+                console.error('Debug chat initialization failed:', error);
+            }
+        });
+
+        debugLog('Debug script loaded');
+    </script>
+</body>
+</html>
