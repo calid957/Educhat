@@ -740,13 +740,28 @@ let realtimeManager;
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    realtimeManager = new RealtimeManager();
-    
-    // Make it globally available
-    window.realtimeManager = realtimeManager;
-    
-    // Initialize chat functionality
-    initializeChatRealtime();
+    try {
+        // Wait a bit for chat.js to initialize first
+        setTimeout(() => {
+            realtimeManager = new RealtimeManager();
+            
+            // Make it globally available
+            window.realtimeManager = realtimeManager;
+            
+            // Initialize chat functionality with error handling
+            try {
+                if (typeof initializeChatRealtime === 'function') {
+                    initializeChatRealtime();
+                }
+            } catch (error) {
+                console.warn('Failed to initialize chat realtime functionality:', error);
+            }
+            
+            console.log('Realtime manager initialized successfully');
+        }, 100);
+    } catch (error) {
+        console.error('Failed to initialize realtime manager:', error);
+    }
 });
 
 // Initialize chat real-time functionality

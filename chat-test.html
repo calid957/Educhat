@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white">
+    <div class="container mx-auto px-4 py-8">
+        <h1>Chat Test Page</h1>
+        <div id="test-output">Loading...</div>
+        <div id="messagesArea" class="mt-4 p-4 bg-gray-800 rounded">
+            <p>Welcome to chat test!</p>
+        </div>
+        <div id="typingIndicator" class="mt-2 text-sm text-gray-400"></div>
+        <input type="text" id="messageInput" placeholder="Type a message..." class="mt-2 p-2 bg-gray-700 rounded w-full">
+    </div>
+
+    <script>
+        console.log('Test page loading...');
+        
+        // Test basic functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded');
+            
+            const testOutput = document.getElementById('test-output');
+            const messagesArea = document.getElementById('messagesArea');
+            const typingIndicator = document.getElementById('typingIndicator');
+            const messageInput = document.getElementById('messageInput');
+            
+            if (testOutput) testOutput.textContent = 'DOM elements found!';
+            if (messagesArea) console.log('messagesArea found');
+            if (typingIndicator) console.log('typingIndicator found');
+            if (messageInput) console.log('messageInput found');
+            
+            // Test currentUser
+            const currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+            console.log('Current user:', currentUser);
+            
+            if (!currentUser) {
+                testOutput.textContent = 'No user found, redirecting...';
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+            } else {
+                testOutput.textContent = `Welcome ${currentUser.firstName}! Chat initialized successfully.`;
+            }
+        });
+    </script>
+</body>
+</html>
