@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="modals.css">
+    <link rel="stylesheet" href="immersive.css">
+</head>
+<body class="min-h-screen relative overflow-y-auto">
+    <!-- Immersive particle system -->
+    <div class="particles-container">
+        <div class="particle particle-1"></div>
+        <div class="particle particle-2"></div>
+        <div class="particle particle-3"></div>
+        <div class="particle particle-4"></div>
+        <div class="particle particle-5"></div>
+    </div>
+    
+    <div class="container mx-auto px-4 py-8 relative z-10 min-h-screen">
+        <div class="max-w-full mx-auto page-transition">
+            <!-- Header -->
+            <div class="text-center mb-8 float-animation">
+                <h1 class="text-4xl font-bold text-white mb-2 immersive-title">Admin Dashboard</h1>
+                <p class="text-white/80 text-lg">System Management & Monitoring</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <!-- Sidebar Navigation -->
+                <div class="lg:col-span-1">
+                    <div class="immersive-glass rounded-2xl p-4 sticky top-4 interactive-hover">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 bg-gradient-to-r from-red-500 to-pink-500 rounded-full flex items-center justify-center text-white">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="ml-3">
+                                <h2 class="text-xl font-semibold text-white">Admin Panel</h2>
+                                <p class="text-white/60 text-sm">System Control</p>
+                            </div>
+                        </div>
+
+                        <nav class="space-y-2">
+                            <button onclick="showSection('dashboard')" class="w-full text-left nav-item immersive-nav-item active">
+                                <i class="fas fa-tachometer-alt mr-3"></i>Dashboard
+                            </button>
+                            <button onclick="showSection('users')" class="w-full text-left nav-item immersive-nav-item">
+                                <i class="fas fa-users mr-3"></i>User Management
+                            </button>
+                            <button onclick="showSection('logs')" class="w-full text-left nav-item immersive-nav-item">
+                                <i class="fas fa-list-alt mr-3"></i>Activity Logs
+                            </button>
+                            <button onclick="showSection('bans')" class="w-full text-left nav-item immersive-nav-item">
+                                <i class="fas fa-ban mr-3"></i>Ban Management
+                            </button>
+                            <button onclick="showSection('settings')" class="w-full text-left nav-item immersive-nav-item">
+                                <i class="fas fa-cog mr-3"></i>Settings
+                            </button>
+                            <button onclick="showSection('violations')" class="nav-item w-full text-left p-3 rounded-lg text-white hover:bg-white/20 transition-colors flex items-center">
+                                <i class="fas fa-exclamation-triangle mr-3"></i>Violation Alerts
+                            </button>
+                            <button onclick="showSection('message-violations')" class="nav-item w-full text-left p-3 rounded-lg text-white hover:bg-white/20 transition-colors flex items-center">
+                                <i class="fas fa-ban mr-3"></i>Message Violations
+                            </button>
+                            <button onclick="showSection('ban-system')" class="nav-item w-full text-left p-3 rounded-lg text-white hover:bg-white/20 transition-colors flex items-center">
+                                <i class="fas fa-gavel mr-3"></i>Ban System
+                            </button>
+                            <button onclick="showSection('unban-requests')" class="nav-item w-full text-left p-3 rounded-lg text-white hover:bg-white/20 transition-colors flex items-center">
+                                <i class="fas fa-undo mr-3"></i>Unban Requests
+                            </button>
+                            <button onclick="showSection('violation-logs')" class="nav-item w-full text-left p-3 rounded-lg text-white hover:bg-white/20 transition-colors flex items-center">
+                                <i class="fas fa-history mr-3"></i>Violation Logs
+                            </button>
+                            <button onclick="showSection('auto-ban')" class="nav-item w-full text-left p-3 rounded-lg text-white hover:bg-white/20 transition-colors flex items-center">
+                                <i class="fas fa-robot mr-3"></i>Auto Ban System
+                            </button>
+                            <button onclick="showSection('user-search')" class="nav-item w-full text-left p-3 rounded-lg text-white hover:bg-white/20 transition-colors flex items-center">
+                                <i class="fas fa-search mr-3"></i>User Search
+                            </button>
+                            <button onclick="showSection('user-details')" class="nav-item w-full text-left p-3 rounded-lg text-white hover:bg-white/20 transition-colors flex items-center">
+                                <i class="fas fa-id-card mr-3"></i>User Details
+                            </button>
+                        </nav>
+
+                        <div class="mt-6 pt-6 border-t border-white/20">
+                            <button onclick="logout()" class="w-full bg-red-500/80 backdrop-blur-sm text-white py-2 px-4 rounded-lg hover:bg-red-600/80 transition-colors">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content Area -->
+                <div class="lg:col-span-3">
+                    <!-- Dashboard Section -->
+                    <div id="dashboard" class="section">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                            <div class="glass p-4 rounded-xl">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-white/60 text-sm">Total Users</p>
+                                        <p class="text-2xl font-bold text-white" id="totalUsers">0</p>
+                                    </div>
+                                    <div class="w-12 h-12 bg-blue-500/30 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-users text-blue-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="glass p-4 rounded-xl">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-white/60 text-sm">Active Users</p>
+                                        <p class="text-2xl font-bold text-white" id="activeUsers">0</p>
+                                    </div>
+                                    <div class="w-12 h-12 bg-green-500/30 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-user-check text-green-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="glass p-4 rounded-xl">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-white/60 text-sm">Banned Users</p>
+                                        <p class="text-2xl font-bold text-white" id="bannedUsers">0</p>
+                                    </div>
+                                    <div class="w-12 h-12 bg-red-500/30 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-user-slash text-red-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="glass p-4 rounded-xl">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-white/60 text-sm">Total Channels</p>
+                                        <p class="text-2xl font-bold text-white" id="totalChannels">0</p>
+                                    </div>
+                                    <div class="w-12 h-12 bg-purple-500/30 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-comments text-purple-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="glass rounded-2xl p-6">
+                                <h3 class="text-xl font-semibold text-white mb-4">User Activity Chart</h3>
+                                <canvas id="userActivityChart"></canvas>
+                            </div>
+                            <div class="glass rounded-2xl p-6">
+                                <h3 class="text-xl font-semibold text-white mb-4">User Registration Trend</h3>
+                                <canvas id="registrationChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Moderator Activity Section -->
+                    <div id="moderator" class="section hidden">
+                        <div class="glass rounded-2xl p-6">
+                            <h3 class="text-xl font-semibold text-white mb-4">Moderator Activity Logs</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-white">
+                                    <thead>
+                                        <tr class="border-b border-white/20">
+                                            <th class="text-left p-3">Moderator</th>
+                                            <th class="text-left p-3">Action</th>
+                                            <th class="text-left p-3">Target</th>
+                                            <th class="text-left p-3">Timestamp</th>
+                                            <th class="text-left p-3">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="moderatorLogs">
+                                        <!-- Logs will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Registered Users Section -->
+                    <div id="users" class="section hidden">
+                        <div class="glass rounded-2xl p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-xl font-semibold text-white">Registered Users</h3>
+                                <div class="flex space-x-2">
+                                    <input type="text" id="userSearch" placeholder="Search users..." class="glass-input px-3 py-2 rounded-lg text-white placeholder-white/60">
+                                    <button onclick="searchUsers()" class="glass-button px-4 py-2 rounded-lg text-white">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-white">
+                                    <thead>
+                                        <tr class="border-b border-white/20">
+                                            <th class="text-left p-3">Name</th>
+                                            <th class="text-left p-3">Email</th>
+                                            <th class="text-left p-3">Class/Trade</th>
+                                            <th class="text-left p-3">Gender</th>
+                                            <th class="text-left p-3">Account Type</th>
+                                            <th class="text-left p-3">Registration Date</th>
+                                            <th class="text-left p-3">Status</th>
+                                            <th class="text-left p-3">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="usersTable">
+                                        <!-- Users will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User Status Section -->
+                    <div id="status" class="section hidden">
+                        <div class="glass rounded-2xl p-6">
+                            <h3 class="text-xl font-semibold text-white mb-4">User Activity Status</h3>
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="text-lg font-medium text-white mb-3">Currently Active Users</h4>
+                                    <div id="activeUsersList" class="space-y-2 max-h-64 overflow-y-auto">
+                                        <!-- Active users will be listed here -->
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-medium text-white mb-3">Inactive Users</h4>
+                                    <div id="inactiveUsersList" class="space-y-2 max-h-64 overflow-y-auto">
+                                        <!-- Inactive users will be listed here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Requests Section -->
+                    <div id="requests" class="section hidden">
+                        <div class="glass rounded-2xl p-6">
+                            <h3 class="text-xl font-semibold text-white mb-4">Pending Requests</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <h4 class="text-lg font-medium text-white mb-3">Channel Creation Requests</h4>
+                                    <div id="channelRequests" class="space-y-2">
+                                        <!-- Channel requests will be listed here -->
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-medium text-white mb-3">Moderator Applications</h4>
+                                    <div id="moderatorRequests" class="space-y-2">
+                                        <!-- Moderator requests will be listed here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- File Management Section -->
+                    <div id="files" class="section hidden">
+                        <div class="glass rounded-2xl p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-xl font-semibold text-white">File Management</h3>
+                                <button onclick="showUploadModal()" class="glass-button px-4 py-2 rounded-lg text-white">
+                                    <i class="fas fa-upload mr-2"></i>Upload File
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <h4 class="text-lg font-medium text-white mb-3">Public Files</h4>
+                                    <div id="publicFiles" class="space-y-2 max-h-64 overflow-y-auto">
+                                        <!-- Public files will be listed here -->
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-medium text-white mb-3">Private Files</h4>
+                                    <div id="privateFiles" class="space-y-2 max-h-64 overflow-y-auto">
+                                        <!-- Private files will be listed here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Logs Section -->
+                    <div id="logs" class="section hidden">
+                        <div class="glass rounded-2xl p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-xl font-semibold text-white">System Logs</h3>
+                                <div class="flex space-x-2">
+                                    <select id="logFilter" class="glass-input px-3 py-2 rounded-lg text-white">
+                                        <option value="all">All Logs</option>
+                                        <option value="login">Login/Logout</option>
+                                        <option value="registration">New Accounts</option>
+                                        <option value="moderation">Moderation</option>
+                                        <option value="system">System</option>
+                                    </select>
+                                    <button onclick="filterLogs()" class="glass-button px-4 py-2 rounded-lg text-white">
+                                        <i class="fas fa-filter"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="systemLogs" class="space-y-2 max-h-96 overflow-y-auto">
+                                <!-- Logs will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Violation Alerts Section -->
+                    <div id="violations" class="section hidden">
+                        <div class="glass rounded-2xl p-6">
+                            <h3 class="text-xl font-semibold text-white mb-4">Violation Alerts</h3>
+                            <div id="violationAlerts" class="space-y-2">
+                                <!-- Violation alerts will be listed here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Message Violations Section -->
+                    <div id="message-violations" class="section hidden">
+                        <div class="glass rounded-2xl p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-xl font-semibold text-white">Message Violation Management</h3>
+                                <button onclick="showAddViolationModal()" class="glass-button px-4 py-2 rounded-lg text-white">
+                                    <i class="fas fa-plus mr-2"></i>Add Restricted Word
+                                </button>
+                            </div>
+                            <div class="mb-4">
+                                <h4 class="text-lg font-medium text-white mb-3">Current Restricted Words</h4>
+                                <div id="restrictedWords" class="flex flex-wrap gap-2">
+                                    <!-- Restricted words will be listed here -->
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-medium text-white mb-3">Detected Violations</h4>
+                                <div id="detectedViolations" class="space-y-2">
+                                    <!-- Detected violations will be listed here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ban System Section -->
+                    <div id="ban-system" class="section hidden">
+                        <div class="glass rounded-2xl p-6">
+                            <h3 class="text-xl font-semibold text-white mb-4">Ban/Unban System</h3>
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="text-lg font-medium text-white mb-3">Ban User</h4>
+                                    <form onsubmit="banUser(event)" class="space-y-4">
+                                        <input type="text" id="banUserEmail" placeholder="User Email" class="w-full glass-input px-3 py-2 rounded-lg text-white placeholder-white/60" required>
+                                        <textarea id="banReason" placeholder="Ban Reason" rows="3" class="w-full glass-input px-3 py-2 rounded-lg text-white placeholder-white/60" required></textarea>
+                                        <input type="datetime-local" id="banDuration" class="w-full glass-input px-3 py-2 rounded-lg text-white" required>
+                                        <button type="submit" class="w-full glass-button px-4 py-2 rounded-lg text-white">
+                                            <i class="fas fa-gavel mr-2"></i>Ban User
+                                        </button>
+                                    </form>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-medium text-white mb-3">Banned Users</h4>
+                                    <div id="bannedUsersList" class="space-y-2 max-h-64 overflow-y-auto">
+                                        <!-- Banned users will be listed here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Unban Requests Section -->
+                    <div id="unban-requests" class="section hidden">
+                        <div class="glass rounded-2xl p-6">
+                            <h3 class="text-xl font-semibold text-white mb-4">Unban Requests</h3>
+                            <div id="unbanRequestsList" class="space-y-2">
+                                <!-- Unban requests will be listed here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Violation Logs Section -->
+                    <div id="violation-logs" class="section hidden">
+                        <div class="glass rounded-2xl p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-xl font-semibold text-white">Violation Logs</h3>
+                                <div class="flex space-x-2">
+                                    <select id="violationLogFilter" class="glass-input px-3 py-2 rounded-lg text-white">
+                                        <option value="all">All Violations</option>
+                                        <option value="message">Message Violations</option>
+                                        <option value="link">Suspicious Links</option>
+                                        <option value="spam">Spam</option>
+                                        <option value="abuse">Abuse</option>
+                                    </select>
+                                    <input type="text" id="violationUserSearch" placeholder="Search user..." class="glass-input px-3 py-2 rounded-lg text-white placeholder-white/60">
+                                    <button onclick="filterViolationLogs()" class="glass-button px-4 py-2 rounded-lg text-white">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="text-lg font-medium text-white mb-3">User Violation Summary</h4>
+                                    <div id="violationSummary" class="space-y-2 max-h-64 overflow-y-auto">
+                                        <!-- Violation summary will be listed here -->
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-medium text-white mb-3">Recent Violations</h4>
+                                    <div id="recentViolations" class="space-y-2 max-h-64 overflow-y-auto">
+                                        <!-- Recent violations will be listed here -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-6">
+                                <h4 class="text-lg font-medium text-white mb-3">Detailed Violation History</h4>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-white">
+                                        <thead>
+                                            <tr class="border-b border-white/20">
+                                                <th class="text-left p-3">User</th>
+                                                <th class="text-left p-3">Violation Type</th>
+                                                <th class="text-left p-3">Content</th>
+                                                <th class="text-left p-3">Severity</th>
+                                                <th class="text-left p-3">Count</th>
+                                                <th class="text-left p-3">Timestamp</th>
+                                                <th class="text-left p-3">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="violationLogsTable">
+                                            <!-- Violation logs will be populated here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Auto Ban System Section -->
+                    <div id="auto-ban" class="section hidden">
+                        <div class="glass rounded-2xl p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-xl font-semibold text-white">Automatic Ban System</h3>
+                                <button onclick="toggleAutoBan()" id="autoBanToggle" class="glass-button px-4 py-2 rounded-lg text-white">
+                                    <i class="fas fa-power-off mr-2"></i>Enable Auto Ban
+                                </button>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="text-lg font-medium text-white mb-3">Auto Ban Configuration</h4>
+                                    <form onsubmit="updateAutoBanSettings(event)" class="space-y-4">
+                                        <div>
+                                            <label class="block text-white text-sm font-medium mb-2">First Violation Ban Duration (hours)</label>
+                                            <input type="number" id="firstViolationDuration" min="1" max="168" value="24" class="w-full glass-input px-3 py-2 rounded-lg text-white" required>
+                                        </div>
+                                        <div>
+                                            <label class="block text-white text-sm font-medium mb-2">Second Violation Ban Duration (hours)</label>
+                                            <input type="number" id="secondViolationDuration" min="1" max="720" value="72" class="w-full glass-input px-3 py-2 rounded-lg text-white" required>
+                                        </div>
+                                        <div>
+                                            <label class="block text-white text-sm font-medium mb-2">Third Violation Ban Duration (hours)</label>
+                                            <input type="number" id="thirdViolationDuration" min="1" max="2160" value="168" class="w-full glass-input px-3 py-2 rounded-lg text-white" required>
+                                        </div>
+                                        <div>
+                                            <label class="block text-white text-sm font-medium mb-2">Violations for Auto Ban</label>
+                                            <input type="number" id="violationsThreshold" min="1" max="10" value="3" class="w-full glass-input px-3 py-2 rounded-lg text-white" required>
+                                        </div>
+                                        <div>
+                                            <label class="block text-white text-sm font-medium mb-2">Time Window (hours)</label>
+                                            <input type="number" id="timeWindow" min="1" max="168" value="24" class="w-full glass-input px-3 py-2 rounded-lg text-white" required>
+                                        </div>
+                                        <button type="submit" class="w-full glass-button px-4 py-2 rounded-lg text-white">
+                                            <i class="fas fa-save mr-2"></i>Save Settings
+                                        </button>
+                                    </form>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="text-lg font-medium text-white mb-3">Auto Ban Statistics</h4>
+                                    <div class="grid grid-cols-2 gap-4 mb-4">
+                                        <div class="glass p-3 rounded-lg">
+                                            <p class="text-white/60 text-sm">Total Auto Bans</p>
+                                            <p class="text-2xl font-bold text-white" id="totalAutoBans">0</p>
+                                        </div>
+                                        <div class="glass p-3 rounded-lg">
+                                            <p class="text-white/60 text-sm">Active Auto Bans</p>
+                                            <p class="text-2xl font-bold text-white" id="activeAutoBans">0</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <h4 class="text-lg font-medium text-white mb-3">Recent Auto Bans</h4>
+                                    <div id="recentAutoBans" class="space-y-2 max-h-64 overflow-y-auto">
+                                        <!-- Recent auto bans will be listed here -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6">
+                                <h4 class="text-lg font-medium text-white mb-3">Violation Threshold Tracking</h4>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-white">
+                                        <thead>
+                                            <tr class="border-b border-white/20">
+                                                <th class="text-left p-3">User</th>
+                                                <th class="text-left p-3">Violation Count</th>
+                                                <th class="text-left p-3">Last Violation</th>
+                                                <th class="text-left p-3">Next Ban Level</th>
+                                                <th class="text-left p-3">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="violationTrackingTable">
+                                            <!-- Violation tracking will be populated here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User Search Section -->
+                    <div id="user-search" class="section hidden">
+                        <div class="glass rounded-2xl p-6">
+                            <h3 class="text-xl font-semibold text-white mb-4">User Search</h3>
+                            
+                            <div class="mb-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                    <div class="lg:col-span-2">
+                                        <label class="block text-white text-sm font-medium mb-2">Search Users</label>
+                                        <div class="flex space-x-2">
+                                            <input type="text" id="adminUserSearchInput" placeholder="Search by name, email, or class..." class="flex-1 glass-input px-3 py-2 rounded-lg text-white placeholder-white/60">
+                                            <button onclick="adminSearchUsers()" class="glass-button px-4 py-2 rounded-lg text-white">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Account Type</label>
+                                        <select id="adminAccountTypeFilter" class="w-full glass-input px-3 py-2 rounded-lg text-white">
+                                            <option value="">All Types</option>
+                                            <option value="student">Student</option>
+                                            <option value="teacher">Teacher</option>
+                                            <option value="admin">Admin</option>
+                                            <option value="moderator">Moderator</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Class/Trade</label>
+                                        <select id="adminClassFilter" class="w-full glass-input px-3 py-2 rounded-lg text-white">
+                                            <option value="">All Classes</option>
+                                            <option value="swd">Software Development</option>
+                                            <option value="acc">Accounting</option>
+                                            <option value="eng">Engineering</option>
+                                            <option value="med">Medical</option>
+                                            <option value="bus">Business</option>
+                                            <option value="art">Arts</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Gender</label>
+                                        <select id="adminGenderFilter" class="w-full glass-input px-3 py-2 rounded-lg text-white">
+                                            <option value="">All Genders</option>
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Account Definition</label>
+                                        <select id="adminAccountDefinitionFilter" class="w-full glass-input px-3 py-2 rounded-lg text-white">
+                                            <option value="">All Types</option>
+                                            <option value="public">Public</option>
+                                            <option value="private">Private</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">User Status</label>
+                                        <select id="adminStatusFilter" class="w-full glass-input px-3 py-2 rounded-lg text-white">
+                                            <option value="">All Status</option>
+                                            <option value="active">Active</option>
+                                            <option value="banned">Banned</option>
+                                            <option value="inactive">Inactive</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Registration Date</label>
+                                        <input type="date" id="adminRegistrationDateFilter" class="w-full glass-input px-3 py-2 rounded-lg text-white">
+                                    </div>
+                                </div>
+                                
+                                <div class="flex space-x-2 mt-4">
+                                    <button onclick="clearAdminUserSearch()" class="bg-gray-500/30 text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-500/40 transition-colors">
+                                        <i class="fas fa-times mr-2"></i>Clear Filters
+                                    </button>
+                                    <button onclick="exportUserSearch()" class="bg-green-500/30 text-green-300 px-4 py-2 rounded-lg hover:bg-green-500/40 transition-colors">
+                                        <i class="fas fa-download mr-2"></i>Export Results
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Search Statistics -->
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                <div class="glass p-4 rounded-lg">
+                                    <p class="text-white/60 text-sm">Total Users</p>
+                                    <p class="text-2xl font-bold text-white" id="adminTotalUsers">0</p>
+                                </div>
+                                <div class="glass p-4 rounded-lg">
+                                    <p class="text-white/60 text-sm">Filtered Results</p>
+                                    <p class="text-2xl font-bold text-white" id="adminFilteredUsers">0</p>
+                                </div>
+                                <div class="glass p-4 rounded-lg">
+                                    <p class="text-white/60 text-sm">Active Users</p>
+                                    <p class="text-2xl font-bold text-white" id="adminActiveUsers">0</p>
+                                </div>
+                                <div class="glass p-4 rounded-lg">
+                                    <p class="text-white/60 text-sm">Banned Users</p>
+                                    <p class="text-2xl font-bold text-white" id="adminBannedUsers">0</p>
+                                </div>
+                            </div>
+
+                            <!-- Search Results -->
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-white">
+                                    <thead>
+                                        <tr class="border-b border-white/20">
+                                            <th class="text-left p-3">
+                                                <input type="checkbox" id="selectAllUsers" class="mr-2" onchange="toggleSelectAllUsers()">
+                                                User
+                                            </th>
+                                            <th class="text-left p-3">Account Type</th>
+                                            <th class="text-left p-3">Class/Trade</th>
+                                            <th class="text-left p-3">Gender</th>
+                                            <th class="text-left p-3">Account Definition</th>
+                                            <th class="text-left p-3">Registration Date</th>
+                                            <th class="text-left p-3">Status</th>
+                                            <th class="text-left p-3">Violations</th>
+                                            <th class="text-left p-3">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="adminUserSearchResults">
+                                        <!-- Search results will be displayed here -->
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Bulk Actions -->
+                            <div class="mt-4 p-4 glass rounded-lg" id="bulkActions" style="display: none;">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <span class="text-white" id="selectedUsersCount">0</span>
+                                        <span class="text-white/60 ml-2">users selected</span>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button onclick="bulkBanUsers()" class="bg-red-500/30 text-red-300 px-4 py-2 rounded-lg hover:bg-red-500/40 transition-colors">
+                                            <i class="fas fa-gavel mr-2"></i>Ban Selected
+                                        </button>
+                                        <button onclick="bulkUnbanUsers()" class="bg-green-500/30 text-green-300 px-4 py-2 rounded-lg hover:bg-green-500/40 transition-colors">
+                                            <i class="fas fa-undo mr-2"></i>Unban Selected
+                                        </button>
+                                        <button onclick="bulkDeleteUsers()" class="bg-orange-500/30 text-orange-300 px-4 py-2 rounded-lg hover:bg-orange-500/40 transition-colors">
+                                            <i class="fas fa-trash mr-2"></i>Delete Selected
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User Details Section -->
+                    <div id="user-details" class="section hidden">
+                        <div class="glass rounded-2xl p-6">
+                            <div class="flex justify-between items-center mb-6">
+                                <h3 class="text-xl font-semibold text-white">Complete User Details</h3>
+                                <div class="flex space-x-2">
+                                    <input type="text" id="userDetailsSearch" placeholder="Search users..." class="glass-input px-3 py-2 rounded-lg text-white placeholder-white/60">
+                                    <button onclick="searchUserDetails()" class="glass-button px-4 py-2 rounded-lg text-white">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                    <button onclick="exportAllUserDetails()" class="bg-green-500/30 text-green-300 px-4 py-2 rounded-lg hover:bg-green-500/40 transition-colors">
+                                        <i class="fas fa-download mr-2"></i>Export All
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- User Statistics -->
+                            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+                                <div class="glass p-4 rounded-lg">
+                                    <p class="text-white/60 text-sm">Total Users</p>
+                                    <p class="text-2xl font-bold text-white" id="detailsTotalUsers">0</p>
+                                </div>
+                                <div class="glass p-4 rounded-lg">
+                                    <p class="text-white/60 text-sm">Students</p>
+                                    <p class="text-2xl font-bold text-white" id="detailsStudents">0</p>
+                                </div>
+                                <div class="glass p-4 rounded-lg">
+                                    <p class="text-white/60 text-sm">Teachers</p>
+                                    <p class="text-2xl font-bold text-white" id="detailsTeachers">0</p>
+                                </div>
+                                <div class="glass p-4 rounded-lg">
+                                    <p class="text-white/60 text-sm">Admins</p>
+                                    <p class="text-2xl font-bold text-white" id="detailsAdmins">0</p>
+                                </div>
+                                <div class="glass p-4 rounded-lg">
+                                    <p class="text-white/60 text-sm">Moderators</p>
+                                    <p class="text-2xl font-bold text-white" id="detailsModerators">0</p>
+                                </div>
+                            </div>
+
+                            <!-- User Details Table -->
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-white text-sm">
+                                    <thead>
+                                        <tr class="border-b border-white/20">
+                                            <th class="text-left p-3">ID</th>
+                                            <th class="text-left p-3">First Name</th>
+                                            <th class="text-left p-3">Last Name</th>
+                                            <th class="text-left p-3">Email</th>
+                                            <th class="text-left p-3">Password</th>
+                                            <th class="text-left p-3">Account Type</th>
+                                            <th class="text-left p-3">Class/Trade</th>
+                                            <th class="text-left p-3">Gender</th>
+                                            <th class="text-left p-3">Account Definition</th>
+                                            <th class="text-left p-3">Registration Date</th>
+                                            <th class="text-left p-3">Status</th>
+                                            <th class="text-left p-3">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="userDetailsTable">
+                                        <!-- User details will be displayed here -->
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Password Security Notice -->
+                            <div class="mt-6 p-4 glass rounded-lg bg-yellow-500/20 border border-yellow-500/30">
+                                <div class="flex items-start">
+                                    <i class="fas fa-exclamation-triangle text-yellow-300 mt-1 mr-3"></i>
+                                    <div>
+                                        <h4 class="text-yellow-300 font-medium mb-2">Security Notice</h4>
+                                        <p class="text-white/80 text-sm">
+                                            Passwords are displayed here for administrative purposes only. In a production environment, 
+                                            passwords should be hashed and not visible in plain text. Consider implementing proper 
+                                            password security measures.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Settings Section -->
+                    <div id="settings" class="section hidden">
+                        <div class="space-y-6">
+                            <!-- Maintenance Mode -->
+                            <div class="immersive-glass rounded-2xl p-6 interactive-hover">
+                                <h3 class="text-xl font-semibold text-white mb-4">
+                                    <i class="fas fa-tools mr-2"></i>Maintenance Mode
+                                </h3>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-white">Enable maintenance mode to temporarily disable user access</p>
+                                        <p class="text-white/60 text-sm mt-1">Users will see a maintenance page when enabled</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="maintenanceMode" class="sr-only peer" onchange="toggleMaintenanceMode()">
+                                        <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                <div id="maintenanceMessage" class="mt-4 hidden">
+                                    <label class="block text-white text-sm font-medium mb-2">Maintenance Message</label>
+                                    <textarea id="maintenanceText" class="w-full immersive-input rounded-lg p-3 text-white placeholder-white/60" rows="3" placeholder="Enter maintenance message...">We're currently undergoing maintenance. Please check back soon.</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Theme/UI Customization -->
+                            <div class="immersive-glass rounded-2xl p-6 interactive-hover">
+                                <h3 class="text-xl font-semibold text-white mb-4">
+                                    <i class="fas fa-palette mr-2"></i>Theme & UI Customization
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <!-- Theme Selection -->
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Theme Preset</label>
+                                        <select id="themePreset" class="w-full immersive-input rounded-lg p-3 text-white" onchange="changeThemePreset()">
+                                            <option value="immersive">Immersive (Default)</option>
+                                            <option value="dark">Dark Mode</option>
+                                            <option value="light">Light Mode</option>
+                                            <option value="cyberpunk">Cyberpunk</option>
+                                            <option value="nature">Nature</option>
+                                            <option value="minimal">Minimal</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- Layout Style -->
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Layout Style</label>
+                                        <select id="layoutStyle" class="w-full immersive-input rounded-lg p-3 text-white" onchange="changeLayoutStyle()">
+                                            <option value="default">Default</option>
+                                            <option value="compact">Compact</option>
+                                            <option value="spacious">Spacious</option>
+                                            <option value="sidebar">Sidebar</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- Primary Color -->
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Primary Color</label>
+                                        <div class="flex items-center space-x-2">
+                                            <input type="color" id="primaryColor" class="h-10 w-20 rounded cursor-pointer" value="#3B82F6" onchange="updatePrimaryColor()">
+                                            <input type="text" id="primaryColorHex" class="flex-1 immersive-input rounded-lg p-2 text-white" value="#3B82F6" onchange="updatePrimaryColorFromHex()">
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Accent Color -->
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Accent Color</label>
+                                        <div class="flex items-center space-x-2">
+                                            <input type="color" id="accentColor" class="h-10 w-20 rounded cursor-pointer" value="#8B5CF6" onchange="updateAccentColor()">
+                                            <input type="text" id="accentColorHex" class="flex-1 immersive-input rounded-lg p-2 text-white" value="#8B5CF6" onchange="updateAccentColorFromHex()">
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Font Size -->
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Font Size</label>
+                                        <select id="fontSize" class="w-full immersive-input rounded-lg p-3 text-white" onchange="updateFontSize()">
+                                            <option value="small">Small</option>
+                                            <option value="medium" selected>Medium</option>
+                                            <option value="large">Large</option>
+                                            <option value="extra-large">Extra Large</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- Animation Speed -->
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Animation Speed</label>
+                                        <select id="animationSpeed" class="w-full immersive-input rounded-lg p-3 text-white" onchange="updateAnimationSpeed()">
+                                            <option value="slow">Slow</option>
+                                            <option value="normal" selected>Normal</option>
+                                            <option value="fast">Fast</option>
+                                            <option value="disabled">Disabled</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <!-- Preview Section -->
+                                <div class="mt-6 p-4 bg-white/10 rounded-lg">
+                                    <p class="text-white text-sm font-medium mb-2">Theme Preview</p>
+                                    <div id="themePreview" class="flex space-x-4">
+                                        <div class="w-20 h-20 bg-blue-500 rounded-lg"></div>
+                                        <div class="w-20 h-20 bg-purple-500 rounded-lg"></div>
+                                        <div class="w-20 h-20 bg-green-500 rounded-lg"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Site Logo & Background -->
+                            <div class="immersive-glass rounded-2xl p-6 interactive-hover">
+                                <h3 class="text-xl font-semibold text-white mb-4">
+                                    <i class="fas fa-image mr-2"></i>Site Logo & Background
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <!-- Logo Upload -->
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Site Logo</label>
+                                        <div class="border-2 border-dashed border-white/30 rounded-lg p-4 text-center">
+                                            <input type="file" id="logoUpload" accept="image/*" class="hidden" onchange="handleLogoUpload(event)">
+                                            <label for="logoUpload" class="cursor-pointer">
+                                                <i class="fas fa-cloud-upload-alt text-3xl text-white/60 mb-2"></i>
+                                                <p class="text-white/60 text-sm">Click to upload logo</p>
+                                                <p class="text-white/40 text-xs">PNG, JPG up to 2MB</p>
+                                            </label>
+                                        </div>
+                                        <div id="logoPreview" class="mt-4 hidden">
+                                            <img id="logoImage" class="h-16 rounded" alt="Logo Preview">
+                                            <button onclick="removeLogo()" class="mt-2 text-red-400 text-sm hover:text-red-300">
+                                                <i class="fas fa-trash mr-1"></i>Remove Logo
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Background Upload -->
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Background Image</label>
+                                        <div class="border-2 border-dashed border-white/30 rounded-lg p-4 text-center">
+                                            <input type="file" id="bgUpload" accept="image/*" class="hidden" onchange="handleBackgroundUpload(event)">
+                                            <label for="bgUpload" class="cursor-pointer">
+                                                <i class="fas fa-cloud-upload-alt text-3xl text-white/60 mb-2"></i>
+                                                <p class="text-white/60 text-sm">Click to upload background</p>
+                                                <p class="text-white/40 text-xs">PNG, JPG up to 5MB</p>
+                                            </label>
+                                        </div>
+                                        <div id="bgPreview" class="mt-4 hidden">
+                                            <img id="bgImage" class="h-16 rounded w-full object-cover" alt="Background Preview">
+                                            <div class="mt-2 flex space-x-2">
+                                                <button onclick="removeBackground()" class="text-red-400 text-sm hover:text-red-300">
+                                                    <i class="fas fa-trash mr-1"></i>Remove
+                                                </button>
+                                                <button onclick="restoreDefaultBackground()" class="text-blue-400 text-sm hover:text-blue-300">
+                                                    <i class="fas fa-undo mr-1"></i>Restore Default
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Background Settings -->
+                                <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Background Opacity</label>
+                                        <input type="range" id="bgOpacity" min="0" max="100" value="100" class="w-full" onchange="updateBackgroundOpacity()">
+                                        <span id="bgOpacityValue" class="text-white/60 text-xs">100%</span>
+                                    </div>
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Background Size</label>
+                                        <select id="bgSize" class="w-full immersive-input rounded-lg p-2 text-white text-sm" onchange="updateBackgroundSize()">
+                                            <option value="cover">Cover</option>
+                                            <option value="contain">Contain</option>
+                                            <option value="stretch">Stretch</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Background Position</label>
+                                        <select id="bgPosition" class="w-full immersive-input rounded-lg p-2 text-white text-sm" onchange="updateBackgroundPosition()">
+                                            <option value="center">Center</option>
+                                            <option value="top">Top</option>
+                                            <option value="bottom">Bottom</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Date & Time Formats -->
+                            <div class="immersive-glass rounded-2xl p-6 interactive-hover">
+                                <h3 class="text-xl font-semibold text-white mb-4">
+                                    <i class="fas fa-clock mr-2"></i>Date & Time Formats
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Date Format</label>
+                                        <select id="dateFormat" class="w-full immersive-input rounded-lg p-3 text-white" onchange="updateDateFormat()">
+                                            <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                                            <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                                            <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                                            <option value="DD MMM YYYY">DD MMM YYYY</option>
+                                            <option value="MMM DD, YYYY">MMM DD, YYYY</option>
+                                        </select>
+                                        <p class="text-white/60 text-xs mt-1">Example: <span id="dateExample">01/29/2026</span></p>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Time Format</label>
+                                        <select id="timeFormat" class="w-full immersive-input rounded-lg p-3 text-white" onchange="updateTimeFormat()">
+                                            <option value="12h">12-hour (AM/PM)</option>
+                                            <option value="24h">24-hour</option>
+                                        </select>
+                                        <p class="text-white/60 text-xs mt-1">Example: <span id="timeExample">6:55 PM</span></p>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Timezone</label>
+                                        <select id="timezone" class="w-full immersive-input rounded-lg p-3 text-white" onchange="updateTimezone()">
+                                            <option value="UTC">UTC</option>
+                                            <option value="EST">Eastern Time</option>
+                                            <option value="PST">Pacific Time</option>
+                                            <option value="GMT">Greenwich Mean Time</option>
+                                            <option value="CET">Central European Time</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">First Day of Week</label>
+                                        <select id="firstDay" class="w-full immersive-input rounded-lg p-3 text-white" onchange="updateFirstDay()">
+                                            <option value="sunday">Sunday</option>
+                                            <option value="monday">Monday</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Email Templates -->
+                            <div class="immersive-glass rounded-2xl p-6 interactive-hover">
+                                <h3 class="text-xl font-semibold text-white mb-4">
+                                    <i class="fas fa-envelope mr-2"></i>Email Templates
+                                </h3>
+                                <div class="space-y-4">
+                                    <!-- Template Selection -->
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Select Template</label>
+                                        <select id="emailTemplate" class="w-full immersive-input rounded-lg p-3 text-white" onchange="loadEmailTemplate()">
+                                            <option value="welcome">Welcome Email</option>
+                                            <option value="password-reset">Password Reset</option>
+                                            <option value="account-verified">Account Verified</option>
+                                            <option value="account-suspended">Account Suspended</option>
+                                            <option value="newsletter">Newsletter</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- Template Editor -->
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Subject</label>
+                                        <input type="text" id="emailSubject" class="w-full immersive-input rounded-lg p-3 text-white" placeholder="Email subject">
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Message Body</label>
+                                        <textarea id="emailBody" class="w-full immersive-input rounded-lg p-3 text-white" rows="8" placeholder="Email message body..."></textarea>
+                                    </div>
+                                    
+                                    <!-- Template Variables -->
+                                    <div>
+                                        <p class="text-white text-sm font-medium mb-2">Available Variables:</p>
+                                        <div class="flex flex-wrap gap-2">
+                                            <span class="bg-white/20 px-2 py-1 rounded text-xs text-white">{user_name}</span>
+                                            <span class="bg-white/20 px-2 py-1 rounded text-xs text-white">{user_email}</span>
+                                            <span class="bg-white/20 px-2 py-1 rounded text-xs text-white">{site_name}</span>
+                                            <span class="bg-white/20 px-2 py-1 rounded text-xs text-white">{reset_link}</span>
+                                            <span class="bg-white/20 px-2 py-1 rounded text-xs text-white">{current_date}</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex space-x-3">
+                                        <button onclick="saveEmailTemplate()" class="immersive-button text-white px-4 py-2 rounded-lg">
+                                            <i class="fas fa-save mr-2"></i>Save Template
+                                        </button>
+                                        <button onclick="previewEmailTemplate()" class="bg-white/20 text-white px-4 py-2 rounded-lg hover:bg-white/30">
+                                            <i class="fas fa-eye mr-2"></i>Preview
+                                        </button>
+                                        <button onclick="resetEmailTemplate()" class="bg-red-500/20 text-red-300 px-4 py-2 rounded-lg hover:bg-red-500/30">
+                                            <i class="fas fa-undo mr-2"></i>Reset to Default
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Push Notification Settings -->
+                            <div class="immersive-glass rounded-2xl p-6 interactive-hover">
+                                <h3 class="text-xl font-semibold text-white mb-4">
+                                    <i class="fas fa-bell mr-2"></i>Push Notification Settings
+                                </h3>
+                                <div class="space-y-4">
+                                    <!-- Enable/Disable Notifications -->
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-white">Enable Push Notifications</p>
+                                            <p class="text-white/60 text-sm">Allow browser push notifications</p>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" id="pushNotifications" class="sr-only peer" checked onchange="togglePushNotifications()">
+                                            <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                        </label>
+                                    </div>
+                                    
+                                    <!-- Notification Types -->
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Notification Types</label>
+                                        <div class="space-y-2">
+                                            <label class="flex items-center">
+                                                <input type="checkbox" id="notifyMessages" class="mr-2 rounded" checked>
+                                                <span class="text-white text-sm">New Messages</span>
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" id="notifyUsers" class="mr-2 rounded" checked>
+                                                <span class="text-white text-sm">User Join/Leave</span>
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" id="notifySystem" class="mr-2 rounded" checked>
+                                                <span class="text-white text-sm">System Updates</span>
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" id="notifyModeration" class="mr-2 rounded">
+                                                <span class="text-white text-sm">Moderation Actions</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Notification Schedule -->
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Quiet Hours</label>
+                                        <div class="flex items-center space-x-2">
+                                            <input type="time" id="quietStart" class="immersive-input rounded-lg p-2 text-white" value="22:00">
+                                            <span class="text-white">to</span>
+                                            <input type="time" id="quietEnd" class="immersive-input rounded-lg p-2 text-white" value="08:00">
+                                        </div>
+                                        <p class="text-white/60 text-xs mt-1">No notifications during these hours</p>
+                                    </div>
+                                    
+                                    <!-- Test Notification -->
+                                    <button onclick="testPushNotification()" class="bg-white/20 text-white px-4 py-2 rounded-lg hover:bg-white/30">
+                                        <i class="fas fa-paper-plane mr-2"></i>Send Test Notification
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- File Upload Settings -->
+                            <div class="immersive-glass rounded-2xl p-6 interactive-hover">
+                                <h3 class="text-xl font-semibold text-white mb-4">
+                                    <i class="fas fa-file-upload mr-2"></i>File Upload Settings
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Max File Size (MB)</label>
+                                        <input type="number" id="maxFileSize" class="w-full immersive-input rounded-lg p-3 text-white" value="10" min="1" max="100" onchange="updateFileSizeLimit()">
+                                        <p class="text-white/60 text-xs mt-1">Maximum file size per upload</p>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Allowed File Types</label>
+                                        <div class="space-y-2">
+                                            <label class="flex items-center">
+                                                <input type="checkbox" id="allowImages" class="mr-2 rounded" checked>
+                                                <span class="text-white text-sm">Images (PNG, JPG, GIF)</span>
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" id="allowDocs" class="mr-2 rounded" checked>
+                                                <span class="text-white text-sm">Documents (PDF, DOC, TXT)</span>
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" id="allowVideos" class="mr-2 rounded">
+                                                <span class="text-white text-sm">Videos (MP4, AVI)</span>
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" id="allowAudio" class="mr-2 rounded">
+                                                <span class="text-white text-sm">Audio (MP3, WAV)</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Storage Limit (GB)</label>
+                                        <input type="number" id="storageLimit" class="w-full immersive-input rounded-lg p-3 text-white" value="50" min="1" max="1000">
+                                        <p class="text-white/60 text-xs mt-1">Total storage limit for all files</p>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Current Storage Usage</label>
+                                        <div class="bg-white/20 rounded-lg p-3">
+                                            <div class="flex justify-between text-sm mb-2">
+                                                <span class="text-white">Used: 15.3 GB</span>
+                                                <span class="text-white">Total: 50 GB</span>
+                                            </div>
+                                            <div class="w-full bg-white/30 rounded-full h-2">
+                                                <div class="bg-green-500 h-2 rounded-full" style="width: 30%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Cache Settings -->
+                            <div class="immersive-glass rounded-2xl p-6 interactive-hover">
+                                <h3 class="text-xl font-semibold text-white mb-4">
+                                    <i class="fas fa-memory mr-2"></i>Cache Settings
+                                </h3>
+                                <div class="space-y-4">
+                                    <!-- Cache Information -->
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        <div class="bg-white/10 rounded-lg p-4">
+                                            <p class="text-white/60 text-sm">Browser Cache</p>
+                                            <p class="text-2xl font-bold text-white" id="browserCacheSize">2.4 MB</p>
+                                        </div>
+                                        <div class="bg-white/10 rounded-lg p-4">
+                                            <p class="text-white/60 text-sm">Application Cache</p>
+                                            <p class="text-2xl font-bold text-white" id="appCacheSize">8.7 MB</p>
+                                        </div>
+                                        <div class="bg-white/10 rounded-lg p-4">
+                                            <p class="text-white/60 text-sm">Total Cache</p>
+                                            <p class="text-2xl font-bold text-white" id="totalCacheSize">11.1 MB</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Cache Controls -->
+                                    <div class="flex flex-wrap gap-3">
+                                        <button onclick="clearBrowserCache()" class="bg-white/20 text-white px-4 py-2 rounded-lg hover:bg-white/30">
+                                            <i class="fas fa-broom mr-2"></i>Clear Browser Cache
+                                        </button>
+                                        <button onclick="clearAppCache()" class="bg-white/20 text-white px-4 py-2 rounded-lg hover:bg-white/30">
+                                            <i class="fas fa-trash mr-2"></i>Clear App Cache
+                                        </button>
+                                        <button onclick="clearAllCache()" class="bg-red-500/20 text-red-300 px-4 py-2 rounded-lg hover:bg-red-500/30">
+                                            <i class="fas fa-exclamation-triangle mr-2"></i>Clear All Cache
+                                        </button>
+                                        <button onclick="refreshCacheInfo()" class="bg-blue-500/20 text-blue-300 px-4 py-2 rounded-lg hover:bg-blue-500/30">
+                                            <i class="fas fa-sync mr-2"></i>Refresh Info
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- Cache Settings -->
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Cache Expiration</label>
+                                        <select id="cacheExpiration" class="w-full immersive-input rounded-lg p-3 text-white">
+                                            <option value="1hour">1 Hour</option>
+                                            <option value="6hours">6 Hours</option>
+                                            <option value="24hours" selected>24 Hours</option>
+                                            <option value="7days">7 Days</option>
+                                            <option value="30days">30 Days</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-white">Enable Caching</p>
+                                            <p class="text-white/60 text-sm">Improve performance with caching</p>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" id="enableCaching" class="sr-only peer" checked>
+                                            <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Terms of Service -->
+                            <div class="immersive-glass rounded-2xl p-6 interactive-hover">
+                                <h3 class="text-xl font-semibold text-white mb-4">
+                                    <i class="fas fa-file-contract mr-2"></i>Terms of Service
+                                </h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-white text-sm font-medium mb-2">Terms of Service Content</label>
+                                        <textarea id="termsContent" class="w-full immersive-input rounded-lg p-3 text-white" rows="12" placeholder="Enter your terms of service...">Welcome to our platform! By using our service, you agree to the following terms and conditions:
+
+1. Acceptance of Terms
+By accessing and using this platform, you accept and agree to be bound by the terms and provision of this agreement.
+
+2. Use License
+Permission is granted to temporarily download one copy of the materials on our platform for personal, non-commercial transitory viewing only.
+
+3. Disclaimer
+The materials on our platform are provided on an 'as is' basis. We make no warranties, expressed or implied, and hereby disclaim and negate all other warranties including without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.
+
+4. Limitations
+In no event shall our company or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on our platform.
+
+5. Privacy Policy
+Your privacy is important to us. Our Privacy Policy explains how we collect, use, and protect your information when you use our platform.
+
+6. Revisions and Errata
+The materials appearing on our platform could include technical, typographical, or photographic errors. We do not warrant that any of the materials on its platform are accurate, complete, or current.
+
+7. Governing Law
+These terms and conditions are governed by and construed in accordance with the laws of the jurisdiction in which our platform operates.</textarea>
+                                    </div>
+                                    
+                                    <div class="flex space-x-3">
+                                        <button onclick="saveTermsOfService()" class="immersive-button text-white px-4 py-2 rounded-lg">
+                                            <i class="fas fa-save mr-2"></i>Save Terms
+                                        </button>
+                                        <button onclick="previewTermsOfService()" class="bg-white/20 text-white px-4 py-2 rounded-lg hover:bg-white/30">
+                                            <i class="fas fa-eye mr-2"></i>Preview
+                                        </button>
+                                        <button onclick="resetTermsOfService()" class="bg-red-500/20 text-red-300 px-4 py-2 rounded-lg hover:bg-red-500/30">
+                                            <i class="fas fa-undo mr-2"></i>Reset to Default
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="bg-white/10 rounded-lg p-4">
+                                        <p class="text-white text-sm font-medium mb-2">Last Updated:</p>
+                                        <p class="text-white/60" id="termsLastUpdated">January 29, 2026</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Save All Settings -->
+                            <div class="flex justify-end space-x-3">
+                                <button onclick="resetAllSettings()" class="bg-red-500/20 text-red-300 px-6 py-3 rounded-lg hover:bg-red-500/30">
+                                    <i class="fas fa-undo mr-2"></i>Reset All Settings
+                                </button>
+                                <button onclick="saveAllSettings()" class="immersive-button text-white px-6 py-3 rounded-lg">
+                                    <i class="fas fa-save mr-2"></i>Save All Settings
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload File Modal -->
+    <div id="uploadModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50">
+        <div class="glass-modal rounded-2xl p-6 max-w-md w-full mx-4">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Upload File</h3>
+            <form onsubmit="uploadFile(event)">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-medium mb-2">File Type</label>
+                    <select id="fileType" class="w-full px-3 py-2 glass-input rounded-md focus:outline-none text-gray-800" required>
+                        <option value="public">Public</option>
+                        <option value="private">Private</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-medium mb-2">File</label>
+                    <input type="file" id="fileInput" class="w-full px-3 py-2 glass-input rounded-md focus:outline-none text-gray-800" required>
+                </div>
+                <div class="flex space-x-3">
+                    <button type="submit" class="flex-1 glass-button text-white py-2 px-4 rounded-md">
+                        Upload
+                    </button>
+                    <button type="button" onclick="closeUploadModal()" class="flex-1 bg-gray-300/80 backdrop-blur-sm text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400/80 transition-colors">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Violation Word Modal -->
+    <div id="addViolationModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50">
+        <div class="glass-modal rounded-2xl p-6 max-w-md w-full mx-4">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Add Restricted Word</h3>
+            <form onsubmit="addRestrictedWord(event)">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Word/Phrase</label>
+                    <input type="text" id="restrictedWord" class="w-full px-3 py-2 glass-input rounded-md focus:outline-none text-gray-800" required placeholder="Enter word or phrase to restrict">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Severity</label>
+                    <select id="violationSeverity" class="w-full px-3 py-2 glass-input rounded-md focus:outline-none text-gray-800" required>
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+                <div class="flex space-x-3">
+                    <button type="submit" class="flex-1 glass-button text-white py-2 px-4 rounded-md">
+                        Add Word
+                    </button>
+                    <button type="button" onclick="closeAddViolationModal()" class="flex-1 bg-gray-300/80 backdrop-blur-sm text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400/80 transition-colors">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div id="messageContainer" class="fixed top-4 right-4 z-50 hidden">
+        <div id="messageContent" class="p-4 rounded-md animate-slide-in"></div>
+    </div>
+
+    <script src="admin.js"></script>
+    <script src="admin-settings.js"></script>
+    <script src="modals.js"></script>
+    <script src="immersive.js"></script>
+    <script src="realtime.js"></script>
+</body>
+</html>

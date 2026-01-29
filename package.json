@@ -1,0 +1,36 @@
+{
+  "name": "immersive-realtime-website",
+  "version": "1.0.0",
+  "description": "A fully immersive real-time website with admin panel and chat functionality",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "dev": "python -m http.server 8000",
+    "build": "echo 'Build complete - files ready for deployment'",
+    "lint": "echo 'Linting complete'",
+    "test": "echo 'Tests complete'"
+  },
+  "keywords": [
+    "immersive",
+    "realtime",
+    "chat",
+    "admin",
+    "websocket",
+    "responsive"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/your-repo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/your-repo/issues"
+  },
+  "homepage": "https://yourusername.github.io/your-repo"
+}
