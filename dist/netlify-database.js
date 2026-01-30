@@ -2,6 +2,19 @@
 class NetlifyDatabaseService {
     constructor() {
         this.baseURL = '/.netlify/functions';
+        this.token = localStorage.getItem('authToken') || null;
+    }
+
+    // Set authentication token
+    setToken(token) {
+        this.token = token;
+        localStorage.setItem('authToken', token);
+    }
+
+    // Clear authentication token
+    clearToken() {
+        this.token = null;
+        localStorage.removeItem('authToken');
     }
 
     // Generic API call method
@@ -15,12 +28,25 @@ class NetlifyDatabaseService {
             ...options
         };
 
+        // Add authorization header if token exists
+        if (this.token) {
+            config.headers.Authorization = `Bearer ${this.token}`;
+        }
+
         try {
+            console.log(`API call: ${config.method || 'GET'} ${url}`);
             const response = await fetch(url, config);
             const data = await response.json();
             
+            console.log('API response:', data);
+            
             if (!response.ok) {
                 throw new Error(data.error || `HTTP error! status: ${response.status}`);
+            }
+            
+            // Store token if returned
+            if (data.token) {
+                this.setToken(data.token);
             }
             
             return data;
@@ -50,6 +76,33 @@ class NetlifyDatabaseService {
             body: JSON.stringify({ email, password })
         });
         return data.user;
+    }
+
+    async getCurrentUser() {
+        const data = await this.apiCall('/users/me');
+        return data.user;
+    }
+
+    async updateCurrentUser(updateData) {
+        const data = await this.apiCall('/users/me', {
+            method: 'PUT',
+            body: JSON.stringify(updateData)
+        });
+        return data.user;
+    }
+
+    async changePassword(currentPassword, newPassword) {
+        const data = await this.apiCall('/users/me/password', {
+            method: 'PUT',
+            body: JSON.stringify({ currentPassword, newPassword })
+        });
+        return data;
+    }
+
+    async logout() {
+        this.clearToken();
+        // In a real implementation, you might want to invalidate the token on the server
+        return { success: true, message: 'Logged out successfully' };
     }
 
     // Message operations

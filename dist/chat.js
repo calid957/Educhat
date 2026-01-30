@@ -192,6 +192,18 @@ function initializeChat() {
         messages.groups = {};
     }
     
+    // Show/hide admin link based on user account type
+    const adminLink = document.getElementById('adminLink');
+    if (adminLink && currentUser) {
+        if (currentUser.accountType === 'admin') {
+            adminLink.style.display = 'block';
+            console.log('Admin link shown for admin user');
+        } else {
+            adminLink.style.display = 'none';
+            console.log('Admin link hidden for non-admin user');
+        }
+    }
+    
     // Set initial chat
     selectChat('public', 'Public Chat');
 }

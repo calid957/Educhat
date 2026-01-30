@@ -142,3 +142,10 @@ exports.handler = async (event, context) => {
         };
     }
 };
+
+// Export helper functions for use in other functions
+module.exports = {
+    readDatabase,
+    writeDatabase,
+    initDatabase
+};
